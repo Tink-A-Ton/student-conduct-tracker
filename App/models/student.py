@@ -4,19 +4,17 @@ from App.database import db
 
 
 class Student(db.Model):
-    __tablename__ = "student"
-    student_id = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True)
-    firstname = db.Column(db.String, nullable=False)
-    lastname = db.Column(db.String, nullable=False)
-    programme: Any = db.Column(db.String, nullable=False)
-    num_reviews = db.Column(db.Integer, nullable=False)
-    reviews = db.relationship("Review", back_populates="student")
+    id: str = db.Column(db.String(9), primary_key=True)
+    first_name: str = db.Column(db.String(100), nullable=False)
+    last_name: str = db.Column(db.String(100), nullable=False)
+    programme: str = db.Column(db.String(100), nullable=False)
+    reviews = db.relationship("Review", backref="student")
 
-    def __init__(self, firstname, lastname, programme):
-        self.firstname = firstname
-        self.lastname = lastname
+    def __init__(self, id: str, first_name: str, last_name: str, programme: str) -> None:
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
         self.programme = programme
-        self.num_reviews = 0
 
-    def __repr__(self):
-        return f"========Student========\nID:{self.student_id}\nName: {self.firstname} {self.lastname}\nProgramme:{self.programme}\nReviews:{self.num_reviews}"
+    def __repr__(self) -> str:
+        return f"{self.first_name} {self.last_name} ({self.programme})"

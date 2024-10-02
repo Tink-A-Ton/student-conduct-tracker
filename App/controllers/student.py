@@ -1,46 +1,27 @@
-from prettytable import PrettyTable
 from App.database import db
-from App.models.student import Student
+from App.models import Student
 from sqlalchemy.exc import SQLAlchemyError
 
 
-def get_student_by_full_name(firstname: str, lastname: str):
-    existing_student = Student.query.filter_by(firstname=firstname, lastname=lastname).first()
-    return None if existing_student is None else existing_student
-
-
-def get_student_by_id(id: int):
-    existing_student = Student.query.filter_by(student_id=id).first()
-    return None if existing_student is None else existing_student
-
-
-def create_student(firstname, lastname, programme):
+def create_student(id: str, first_name: str, last_name: str, programme: str) -> bool:
     try:
-        new_student = Student(firstname, lastname, programme)
-        db.session.add(new_student)
+        student = Student(id, first_name, last_name, programme)
+        db.session.add(student)
         db.session.commit()
+        return True
     except SQLAlchemyError as e:
         db.session.rollback()
-        print("Student could not be added")
+        print(f"Error creating student: {e}")
+        return False
 
 
-def query_student_by_name(firstname, lastname):
-    students = Student.query.filter_by(firstname=firstname, lastname=lastname).all()
-    return students
+def get_all_students() -> list[Student]:
+    return Student.query.all()
 
 
-def get_all_students():
-    students = Student.query.all()
-    return students
+def get_student(id: str) -> Student | None:
+    return Student.query.get(id)
 
 
-def create_student_table(students):
-    table = PrettyTable()
-    table.field_names = ["Student ID", "Name", "Programme", "Number of Reviews"]
-
-    for student in students:
-        table.add_row(
-            [student.student_id, f"{student.firstname} {student.lastname}", student.programme, student.num_reviews]
-        )
-
-    print(table)
+def get_students_by_name(first_name: str, last_name: str) -> list[Student]:
+    return Student.query.filter_by(first_name=first_name, last_name=last_name).all()

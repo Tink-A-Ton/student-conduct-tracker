@@ -1,18 +1,14 @@
-# import click
+import click
 from flask.cli import AppGroup
 from App.database import get_migrate
 from App.main import create_app
-from App.controllers import initialize
-from App.controllers.student import (
-    create_student,
-    create_student_table,
+from App.models import Student, Staff
+from App.controllers import (
+    initialize,
     get_all_students,
-    get_student_by_id,
-    query_student_by_name,
+    get_student,
+    get_students_by_name,
 )
-from App.controllers.staff import get_all_staff, get_staff_by_name, get_staff_by_username
-from App.models.staff import create_staff_table
-from App.controllers.review import create_review_table
 
 app = create_app()
 migrate = get_migrate(app)
@@ -24,169 +20,46 @@ def init():
     print("database intialized")
 
 
-"""
-Reviewer Commands
-"""
-reviewer = AppGroup("reviewer", help="reviewer commands for viewing students and reading/writing review")
+student_cli = AppGroup("student", help="Student object commands")
 
 
-@reviewer.command("add_student", help="adds a new student to the database")
-def add() -> None:
-    firstname = input("Student First Name: ")
-    lastname = input("Student Last Name: ")
-    programme = input("Student Programme: ")
-    create_student(firstname, lastname, programme)
-    print(f"Student {firstname} was added!")
-
-
-@reviewer.command("find_students", help="lists all students with the specified first and last name")
-def find_student() -> None:
-
-    firstname = input("Student First Name: ")
-    lastname = input("Student Last Name: ")
-    students = query_student_by_name(firstname, lastname)
+@student_cli.command("list-all", help="List all students")
+def list_students_command() -> None:
+    students: list[Student] = get_all_students()
     if not students:
-        print("No students found")
-        return
+        print("There are currently no students registered.")
     else:
-        create_student_table(students)
+        print(students)
 
 
-@reviewer.command("find_staff", help="lists all staff with the specified first and last name")
-def find_staff() -> None:
-    firstname = input("Staff Member First Name: ")
-    lastname = input("Staff Member Last Name: ")
-    staff = get_staff_by_name(firstname, lastname)
-    if not staff:
-        print("No staff found")
-        return
-    else:
-        create_staff_table(staff)
+# This command searches for and displays a student in the database based on ID
+# flask student search-id
+@student_cli.command("search-id", help="Search for a student by ID")
+def get_student_by_id_command() -> None:
+    student_id: str = click.prompt(text="Enter Student ID", type=str)
+    student: Student | None = get_student(student_id)
+    if student:
+        print(student)
 
 
-@reviewer.command("list_students", help="lists all students in the database")
-def list_students():
-    students = get_all_students()
-    if not students:
-        print("Currently No Students in the Database")
-        return
-    else:
-        create_student_table(students)
+# This command searches for and displays a student in the database based on name
+# flask student search-name
+@student_cli.command("search-name", help="Search for students by name")
+def get_student_by_name_command() -> None:
+    first_name: str = click.prompt(text="Enter first_name")
+    last_name: str = click.prompt(text="Enter last_name")
+    students: list[Student] = get_students_by_name(first_name, last_name)
+    if students:
+        print(students)
 
 
-@reviewer.command("list_staff", help="lists all staff in the database")
-def list_staff():
-    staff = get_all_staff()
-    if not staff:
-        print("Currently No staff in the Database")
-        return
-    else:
-        create_staff_table(staff)
+@student_cli.command("view-reviews", help="View a student's reviews")
+def get_student_reviews_command() -> None:
+    print(get_all_students())
+    student_id: str = click.prompt(text="Enter Student ID", type=int)
+    student: Student | None = get_student(student_id)
+    if student:
+        print(student.reviews)
 
 
-@reviewer.command("review_student", help="creates a review of a student")
-def write_review() -> None:
-    student_id = int(input("Enter the ID of the student you would like to review: "))
-    score = int(input("Enter their score out of 10: "))
-    comment = input("Make a comment about the student: ")
-
-    if score > 10:
-        print("Score should be a value from 0 to 10")
-        return
-
-    student = get_student_by_id(student_id)
-    if student is None:
-        print(f"Student could not be found")
-        return
-
-    username = input("Enter your staff username: ")
-    staff = get_staff_by_username(username)
-    if staff:
-        try:
-            staff.review_student(score, comment, int(student_id))
-            print("Review added successfully")
-        except ValueError as e:
-            print(f"Error: {str(e)}")
-    else:
-        print("Invalid staff username")
-
-
-@reviewer.command("get_student_reviews", help="lists the reviews for a student listed by ID")
-def get_student_reviews() -> None:
-    student_id = int(input("Enter Student ID: "))
-    student = get_student_by_id(student_id)
-    if student is None:
-        print(f"{student_id} is not a valid student ID")
-        return
-
-    reviews = student.reviews
-    if not reviews:
-        print(f"Student of ID:{student.student_id} currently has no reviews")
-        return
-
-    create_review_table(reviews)
-
-
-@reviewer.command("get_staff_reviews", help="lists the reviews written by a staff member by username")
-def review() -> None:
-    username = input("Enter Staff Username: ")
-    staff = get_staff_by_username(username)
-    if staff is None:
-        print(f"{username} is not a valid member of staff")
-        return
-    reviews = staff.reviews
-    if not reviews:
-        print(f"{staff.firstname} {staff.lastname} has not written any reviews")
-        return
-    else:
-        create_review_table(reviews)
-
-
-app.cli.add_command(reviewer)
-
-
-# @reviewer.command("add_student", help="adds a new student to the database")
-# @click.argument("firstname", type=str)
-# @click.argument("lastname", type=str)
-# @click.argument("programme", type=str)
-# def add(firstname: str, lastname: str, programme: str) -> None:
-#     create_student(firstname, lastname, programme)
-#     print(f"Student {firstname} was added!")
-
-# @reviewer.command("review_student", help="creates a review of a student")
-# @click.argument("student_id")
-# @click.argument("score")
-# @click.argument("comment")
-# def write_review(student_id, score: int, comment) -> None:
-#     score = int(score)
-#     if score > 10:
-#         print("Score should be a value from 0 to 10")
-#         return
-#     student = get_student_by_id(student_id)
-#     if student is None:
-#         print(f"Student could not be found")
-#         return
-#     username = input("Enter your staff username: ")
-#     staff = get_staff_by_username(username)
-#     if staff:
-#         try:
-#             staff.review_student(score, comment, int(student_id))
-#             print("Review added successfully")
-#         except ValueError as e:
-#             print(f"Error: {str(e)}")
-#     else:
-#         print("Invalid staff username")
-# @reviewer.command("get_student_reviews", help="lists the reviews for a student listed by ID")
-# def get_student_reviews() -> None:
-#     student_id = int(input("Enter Student ID: "))
-#     student = get_student_by_id(student_id)
-#     if student is None:
-#         print(f"{student_id} is not a valid student ID")
-#         return
-#     review = student.reviews
-#     if not review:
-#         print(f"Student of ID:{student.student_id} currently has no reviews")
-#         return
-#     print(f"===================Reviews for {student.firstname}===================")
-#     for review in review:
-#         print(review)
+app.cli.add_command(student_cli)

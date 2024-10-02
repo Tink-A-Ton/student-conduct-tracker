@@ -3,31 +3,21 @@ from App.database import db
 from sqlalchemy.exc import SQLAlchemyError
 
 
-def create_staff(firstname, lastname, title, password):
+def create_staff(id: str, password: str, firstname: str, lastname: str) -> bool:
     try:
-        staff = Staff(firstname, lastname, title, password)
+        staff = Staff(id, password, firstname, lastname)
         db.session.add(staff)
         db.session.commit()
+        return True
     except SQLAlchemyError as e:
         db.session.rollback()
-        print(f"Error adding staff member {firstname} {lastname}: {e}")
+        print(f"Error creating staff: {e}")
+        return False
 
 
-def get_staff_by_id(staff_id: int):
-    return Staff.query.filter_by(id=staff_id).first()
+def get_staff(id: str) -> Staff | None:
+    return Staff.query.get(id)
 
 
-def get_staff_by_name(firstname, lastname):
-    return Staff.query.filter_by(firstname=firstname, lastname=lastname).all()
-
-
-def get_staff_by_title(title):
-    return Staff.query.filter_by(title=title).all()
-
-
-def get_staff_by_username(username):
-    return Staff.query.filter_by(username=username).first()
-
-
-def get_all_staff():
+def get_all_staff() -> list[Staff]:
     return Staff.query.all()

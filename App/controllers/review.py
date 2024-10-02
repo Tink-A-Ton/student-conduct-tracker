@@ -1,26 +1,47 @@
-from prettytable import PrettyTable
 from App.database import db
-from App.models.review import Review
-from App.models.student import Student
+from App.models import Staff, Student, Review
+from .staff import get_staff
+from .student import get_student
 
 
-def add_review(score: int, comment: str, student_id: int, staff) -> None:
-    student = Student.query.get(student_id)
+def create_review(student_id: str, staff_id: str, rating: int, comment: str) -> bool:
+    staff: Staff | None = get_staff(staff_id)
+    student: Student | None = get_student(student_id)
+
     if student is None:
-        raise ValueError(f"No student found with ID {student_id}")
+        print("Invalid student ID.")
+        return False
 
-    review = Review(student_id=student_id, score=score, comment=comment, staff=staff)
-    student.num_reviews += 1
+    if staff is None:
+        print("Invalid staff ID.")
+        return False
+
+    if rating < 1 or rating > 5:
+        print(f"Rating must be between 1 (Very Poor) and 5 (Excellent).\n")
+        return False
+
+    review = Review(student.id, staff.id, rating, comment)
     db.session.add(review)
     db.session.commit()
+    return True
 
 
-def create_review_table(reviews):
-    table = PrettyTable()
-    table.field_names = ["Review ID", "Student Name", "Score", "Comment", "Experience", "Written by"]
-    for review in reviews:
-        experience = "Positive" if review.experience else "Negative"
-        staff_name = f"{review.staff.firstname} {review.staff.lastname}"
-        student_name = f"{review.student.firstname} {review.student.lastname}"
-        table.add_row([review.reviewID, student_name, review.score, review.comment, experience, staff_name])
-    print(table)
+def get_all_reviews() -> list[Review]:
+    return Review.query.all()
+
+
+#  shud prob have better querying
+def get_reviews_by_student(student_id: str) -> Review | None:
+    reviews: Review | None = Review.query.filter_by(student_id=student_id).first()
+    if not reviews:
+        print(f"No reviews found for student ID [ {student_id} ]")
+        return
+    return reviews
+
+
+def get_reviews_by_staff(staff_id: str) -> Review | None:
+    reviews: Review | None = Review.query.filter_by(staff_id=staff_id).first()
+    if not reviews:
+        print(f"No reviews found for staff ID [ {staff_id} ]")
+        return
+    return reviews

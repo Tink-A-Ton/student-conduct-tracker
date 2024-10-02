@@ -1,17 +1,15 @@
 from App.models import User
 from App.database import db
 
-def create_user(username, password):
-    existing_user = get_user_by_username(username)
+def create_user(id, password):
+    existing_user = get_user(id)
     if existing_user:
         return None
-    newuser = User(username=username, password=password)
+    newuser = User(id, password)
     db.session.add(newuser)
     db.session.commit()
     return newuser
 
-def get_user_by_username(username):
-    return User.query.filter_by(username=username).first()
 
 def get_user(id):
     return User.query.get(id)
