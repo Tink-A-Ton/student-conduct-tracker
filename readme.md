@@ -7,8 +7,11 @@
 A command-line interface for staff to provide reports on students, including a score out of 10 and detailed comments.
 
 ## Todo
-- [] Update python version
 - [] add error handling
-- [] quickly reimplement wsgi for funs
-- [] reimplement auth controllers
-- [] check model contraints
+- [] Make User abstract
+- [] Refactor
+- [] Update python version
+
+- [x] quickly reimplement wsgi for funs
+- [x] reimplement auth controllers
+- [x] check model contraints
