@@ -16,5 +16,11 @@ class Review(db.Model):
         self.rating = rating
         self.comment = comment
 
-    def __repr__(self) -> str:
-        return f"{self.student_id} - {self.staff_id} - {self.rating} - {self.comment}"
+    def get_json(self) -> dict[str, str | int]:
+        return {
+            "id": self.id,
+            "staff_id": self.staff_id,
+            "student_id": self.student_id,
+            "rating": self.rating,
+            "comment": self.comment,
+        }

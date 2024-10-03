@@ -7,6 +7,5 @@ from .staff import get_all_staff, get_staff, create_staff
 from .review import (
     create_review,
     get_all_reviews,
-    get_reviews_by_staff,
-    get_reviews_by_student,
+    get_student_reviews,
 )
