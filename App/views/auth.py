@@ -1,5 +1,4 @@
-from flask import Blueprint, Response, jsonify
-from flask import Blueprint, request
+from flask import Blueprint, Response, jsonify, request
 from flask_jwt_extended import jwt_required, set_access_cookies, unset_jwt_cookies
 from ..controllers.auth import login_user
 
