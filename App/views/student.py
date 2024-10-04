@@ -12,7 +12,6 @@ from ..controllers import (
 student = Blueprint("student", __name__)
 
 
-# requested
 @student.route("/student/<id>", methods=["GET"])
 @jwt_required()
 def search_student(id: str) -> tuple[Response, int]:
@@ -22,7 +21,6 @@ def search_student(id: str) -> tuple[Response, int]:
     return jsonify(student.get_json()), 200
 
 
-# request written
 @student.route("/students", methods=["GET"])
 @jwt_required()
 def search_students() -> tuple[Response, int]:
@@ -30,7 +28,6 @@ def search_students() -> tuple[Response, int]:
     return jsonify([s.get_json() for s in students]), 200
 
 
-# request written
 @student.route("/students/<first_name>-<last_name>", methods=["GET"])
 @jwt_required()
 def search_students_by_name(first_name: str, last_name: str) -> tuple[Response, int]:
@@ -40,7 +37,6 @@ def search_students_by_name(first_name: str, last_name: str) -> tuple[Response, 
     return jsonify([s.get_json() for s in students]), 200
 
 
-# posted
 @student.route("/student", methods=["POST"])
 @jwt_required()
 def add_student() -> tuple[Response, int]:

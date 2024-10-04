@@ -8,4 +8,5 @@ from .review import (
     create_review,
     get_all_reviews,
     get_student_reviews,
+    get_review,
 )

@@ -1,4 +1,3 @@
-from typing import Any
 from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
 
@@ -11,7 +10,7 @@ class User(db.Model):
         self.id = id
         self.set_password(password)
 
-    def get_json(self) -> dict[str, Any]:
+    def get_json(self) -> dict[str, str]:
         return {"id": self.id}
 
     def set_password(self, password) -> None:

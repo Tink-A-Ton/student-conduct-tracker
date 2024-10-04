@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask.wrappers import Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from App.controllers import get_all_reviews, create_review, get_student_reviews
-from App.models import Review, User
-from controllers.review import get_review
+from App.controllers import get_all_reviews, create_review, get_student_reviews, get_review
+from App.models import Review
 
 review = Blueprint("review", __name__)
 
