@@ -27,7 +27,7 @@ def get_all_reviews() -> list[Review]:
     return Review.query.all()
 
 
-def get_review(id: str):
+def get_review(id: str) -> Review:
     return Review.query.get(id)
 
 
