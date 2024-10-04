@@ -21,7 +21,7 @@ def search_student_reviews(student_id) -> tuple[Response, int]:
     reviews: list[Review] = get_student_reviews(student_id)
     if reviews is None:
         return jsonify(error="Reviews not found"), 404
-    return jsonify(r.get_json() for r in reviews), 200
+    return jsonify([r.get_json() for r in reviews]), 200
 
 
 @review.route("/review", methods=["POST"])
@@ -33,8 +33,8 @@ def create_reviews_action() -> tuple[Response, int]:
     comment: str | None = data.get("comment")
     if student_id is None or rating is None or comment is None:
         return jsonify(error="Data missing"), 401
-    staff: User = get_jwt_identity()
-    if not create_review(student_id, staff.id, rating, comment):
+    staff_id: str = get_jwt_identity()
+    if not create_review(student_id, staff_id, rating, comment):
         return jsonify(error="Unauthorized or Invalid Data Provided"), 401
     return jsonify(message="Review created"), 201
 
