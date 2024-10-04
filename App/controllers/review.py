@@ -27,6 +27,10 @@ def get_all_reviews() -> list[Review]:
     return Review.query.all()
 
 
+def get_review(id: str):
+    return Review.query.get(id)
+
+
 def get_student_reviews(student_id: str) -> list[Review]:
     return Review.query.filter_by(student_id=student_id).all()
 
