@@ -14,8 +14,5 @@ class Staff(User):
         self.first_name: str = first_name
         self.last_name: str = last_name
 
-    def __repr__(self) -> str:
-        return f"{self.first_name} {self.last_name}"
-
     def check_password(self, password) -> bool:
         return check_password_hash(self.password, password)

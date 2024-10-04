@@ -14,27 +14,37 @@ def initialize() -> None:
         reader = csv.DictReader(students_file)
         for row in reader:
             create_student(
-                row["student_id"], row["firstname"], row["lastname"], row["programme"]
+                id=row["student_id"], 
+                first_name=row["firstname"], 
+                last_name=row["lastname"], 
+                programme=row["programme"]
             )
 
     with open("App/data/staff.csv") as staff_file:
         reader = csv.DictReader(staff_file)
         for row in reader:
             create_staff(
-                row["staff_id"],
-                row["password"],
-                row["firstname"],
-                row["lastname"],
+                id=row["staff_id"],
+                password=row["password"],
+                firstname=row["firstname"],
+                lastname=row["lastname"],
             )
 
     with open("App/data/reviews.csv") as reviews_file:
         reader = csv.DictReader(reviews_file)
         for row in reader:
             create_review(
-                row["student_id"], row["staff_id"], int(row["rating"]), row["comment"]
+                student_id=row["student_id"],
+                staff_id=row["staff_id"],
+                title=row["title"],
+                rating=int(row["rating"]),
+                comment=row["comment"]
             )
 
     with open("App/data/admin.csv") as reviews_file:
         reader = csv.DictReader(reviews_file)
         for row in reader:
-            create_admin(row["admin_id"], row["password"])
+            create_admin(
+                id=row["admin_id"],
+                password=row["password"]
+            )
