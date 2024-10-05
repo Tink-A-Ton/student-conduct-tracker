@@ -9,10 +9,10 @@ class StudentUnitTests(unittest.TestCase):
         new_student: Student = Student(
             "816035001", "Ruben", "Dias", "BSc. Computer Science (Special)"
         )
-        self.assertEqual(new_student.id, "816035001")
-        self.assertEqual(new_student.first_name, "Ruben")
-        self.assertEqual(new_student.last_name, "Dias")
-        self.assertEqual(new_student.programme, "BSc. Computer Science (Special)")
+        self.assertEqual(new_student.id, "816035001", "Student ID Mismatch")
+        self.assertEqual(new_student.first_name, "Ruben", "First Name Mismatch")
+        self.assertEqual(new_student.last_name, "Dias", "Last Name Mismatch")
+        self.assertEqual(new_student.programme, "BSc. Computer Science (Special)", "Programme Mismatch")
 
     def test_student_get_json(self):
         new_student: Student = Student(
@@ -27,4 +27,5 @@ class StudentUnitTests(unittest.TestCase):
                 "last_name": "Dias",
                 "programme": "BSc. Computer Science (Special)",
             },
+            "Student JSON object does not match expected fields or values"
         )
