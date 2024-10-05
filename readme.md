@@ -7,10 +7,12 @@
 A command-line interface for staff to provide reports on students, including a score out of 10 and detailed comments.
 
 ## Todo
-- [] phase out .App
-- [] add error handling
-- [] Refactor
-- [] Update python version
+- [ ] Finish Read Me
+- [ ] Add pretty print to help commands
+- [ ] Refactor
+- [ ] phase out .App
+- [ ] add error handling
+- [ ] Update python version (maybe)
 
 - [x] Make User abstract
 - [x] quickly reimplement wsgi for funs

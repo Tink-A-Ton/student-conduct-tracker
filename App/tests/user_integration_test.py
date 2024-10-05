@@ -27,7 +27,7 @@ def empty_db() -> Generator[FlaskClient, logging.Logger, None]:
     db.drop_all()
 
 
-class UsersIntegrationTests(unittest.TestCase):
+class UserIntegrationTests(unittest.TestCase):
     def setUp(self) -> None:
         """Set up initial conditions for each test."""
         self.user_id = "816035671"

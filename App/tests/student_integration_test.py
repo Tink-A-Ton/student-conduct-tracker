@@ -10,7 +10,6 @@ from ..controllers import (
     get_student,
     get_students_by_name,
 )
-
 from ..models import Student
 
 LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -24,6 +23,7 @@ def empty_db() -> Generator[FlaskClient, logging.Logger, None]:
     create_db()
     yield app.test_client()
     db.drop_all()
+
 
 class StudentIntegrationTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -43,7 +43,9 @@ class StudentIntegrationTests(unittest.TestCase):
         """Test creating a student and verifying the details."""
         create_student(self.student_id, self.first_name, self.last_name, self.programme)
         student: Student | None = get_student(self.student_id)
-        self.assertIsNotNone(student, "Expected to retrieve a Student object, but got None")
+        self.assertIsNotNone(
+            student, "Expected to retrieve a Student object, but got None"
+        )
         assert student is not None
         self.assertEqual(student.id, self.student_id, "Student ID mismatch")
         self.assertEqual(student.first_name, self.first_name, "First name mismatch")
@@ -64,6 +66,12 @@ class StudentIntegrationTests(unittest.TestCase):
         """Test fetching all students."""
         create_student("816034893", "Ruben", "Diaz", "MSc. Computer Science")
         students: list[Student] = get_all_students()
-        self.assertGreater(len(students), 0, "Expected at least one student in the database")
+        self.assertGreater(
+            len(students), 0, "Expected at least one student in the database"
+        )
         student_ids: list[str] = [student.id for student in students]
-        self.assertIn("816034893", student_ids, "Expected student ID to be in the list of all students")
+        self.assertIn(
+            "816034893",
+            student_ids,
+            "Expected student ID to be in the list of all students",
+        )
