@@ -2,8 +2,8 @@ from App.models import User
 from App.database import db
 
 
-def create_user(id, password) -> User | None:
-    existing_user = get_user(id)
+def create_user(id: str, password: str) -> User | None:
+    existing_user: User = get_user(id)
     if existing_user:
         return None
     newuser = User(id, password)
@@ -12,7 +12,7 @@ def create_user(id, password) -> User | None:
     return newuser
 
 
-def get_user(id) -> User:
+def get_user(id: str) -> User:
     return User.query.get(id)
 
 

@@ -13,15 +13,15 @@ def create_review(student_id: str, staff_id: str, title: str, rating: int, comme
         print("Invalid staff ID.")
         return False
 
-    if rating < 1 or rating > 5:
-        print("Rating must be between 1 (Very Poor) and 5 (Excellent)")
+    if rating < 1 or rating > 10:
+        print("Rating must be between 1 (Very Poor) and 10 (Excellent)")
         return False
     
     if title is None or title == "":
         print("Title is required for a review")
         return False
 
-    review = Review(student_id, title, staff_id, rating, comment)
+    review = Review(student_id, staff_id, title, rating, comment)
     db.session.add(review)
     db.session.commit()
     return True
