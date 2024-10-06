@@ -15,7 +15,7 @@ Flask application designed using the **Model-View-Controller (MVC)** architectur
 1. **Clone the repository**:
     ```sh
     git clone https://github.com/Tink-A-Ton/student-conduct-tracker.git
-    cd student-conduct-track
+    cd student-conduct-tracker
     ```
 
 2. **(Optional) Create a virtual environment**:
@@ -36,9 +36,14 @@ Flask application designed using the **Model-View-Controller (MVC)** architectur
     pip install -r requirements.txt
     ```
     
-4. **Run the Code**
+4. **Initialize the application**
     ```sh
     flask init
+    ```
+
+5. **Run the application**
+    ```sh
+    flask run
     ```
 
 #### **Alernative**
@@ -50,16 +55,16 @@ Flask application designed using the **Model-View-Controller (MVC)** architectur
 # API Routes
 ## Student Routes
 
-1. /student/&lt;id&gt; [GET]: Retrieve student details by ID.
-2. /students [GET]: Retrieve all students.
-3. /student [POST]: Add a new student (admin only).
+1. ```/student/<id> [GET]``` : Retrieve student details by ID.
+2. ```/students [GET]``` : Retrieve all students.
+3. ```/student [POST]``` : Add a new student (admin only).
 
 ## Review Routes
 
-1. /reviews [GET]: Retrieve all reviews.
-2. /reviews/&lt;student_id&gt; [GET]: Retrieve reviews for a specific student by ID.
-3. /review [POST]: Create a new review for a student.
-4. /review/&lt;id&gt; [GET]: Retrieve a review by ID.
+1. ```/reviews [GET]``` : Retrieve all reviews.
+2. ```/reviews/<student_id> [GET]``` : Retrieve reviews for a specific student by ID.
+3. ```/review [POST]``` : Create a new review for a student.
+4. ```/review/<id> [GET]``` : Retrieve a review by ID.
 
 
 Routes for server can be tested via [postman](postmanlinkhere)
@@ -68,7 +73,7 @@ Routes for server can be tested via [postman](postmanlinkhere)
 
 ## Model Diagram 
 
-Description of diagram succint
+The model diagram denotes a User class that is inherited by Admin and Staff, along with a Student data class. Staff write Reviews for Students, while Admins add new Students to the system.
 
 <img src="https://imgur.com/BeUcGZM.png" alt="Model Diagram" height="500"/>
 
