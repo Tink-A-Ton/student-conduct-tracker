@@ -4,8 +4,8 @@ Flask application designed using the **Model-View-Controller (MVC)** architectur
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Tink-A-Ton/student-conduct-tracker)
+<!-- 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Tink-A-Ton/student-conduct-tracker) -->
 
 
 ## Installation 
@@ -70,18 +70,15 @@ Routes for server can be tested via [postman](postmanlinkhere)
 
 Description of diagram succint
 
-<img src="https://imgur.com/BeUcGZM.png" alt="Model Diagram" height="400"/>
+<img src="https://imgur.com/BeUcGZM.png" alt="Model Diagram" height="500"/>
 
+## Test & CLI Commands
 
-## Test & CLI Commands 
-
-Below are the available CLI commands for database operations and testing:
-
-| Command                        | Description                                                                                          | Usage                                                      |
-|--------------------------------|------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| `flask init`                   | Creates and initializes the database.                                                                | `flask init`                                               |
-| `flask test user`             | Runs User tests (Unit and/or Integration).                                                           | `flask test user [type]` (default: all)                   |
-| `flask test student`          | Runs Student tests (Unit and/or Integration).                                                        | `flask test student [type]` (default: all)                |
-| `flask test review`           | Runs Review tests (Unit and/or Integration).                                                         | `flask test review [type]` (default: all)                 |
-| `flask test all`              | Runs all tests (Unit and Integration) sequentially.                                                  | `flask test all`                                          |
-| `flask help`                  | Displays all available commands and their descriptions.                                              | `flask help`                                             |
+| Command          | Description                                   | Usage                                |
+|------------------|-----------------------------------------------|--------------------------------------|
+| `flask init`     | Creates and initializes the database.         | `flask init`                         |
+| `flask test user`| Runs User tests (Unit/Integration).           | `flask test user [type]`             |
+| `flask test student`| Runs Student tests (Unit/Integration).     | `flask test student [type]`          |
+| `flask test review` | Runs Review tests (Unit/Integration).      | `flask test review [type]`           |
+| `flask test all`   | Runs all tests sequentially.                | `flask test all`                     |
+| `flask help`      | Displays available commands.                 | `flask help`                         |
