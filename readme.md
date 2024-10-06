@@ -79,11 +79,14 @@ The model diagram denotes a User class that is inherited by Admin and Staff, alo
 
 ## Test & CLI Commands
 
-| Command          | Description                                   | Usage                                |
-|------------------|-----------------------------------------------|--------------------------------------|
-| `flask init`     | Creates and initializes the database.         | `flask init`                         |
-| `flask test user`| Runs User tests (Unit/Integration).           | `flask test user [type]`             |
-| `flask test student`| Runs Student tests (Unit/Integration).     | `flask test student [type]`          |
-| `flask test review` | Runs Review tests (Unit/Integration).      | `flask test review [type]`           |
-| `flask test all`   | Runs all tests sequentially.                | `flask test all`                     |
-| `flask help`      | Displays available commands.                 | `flask help`                         |
+| Command              | Description                                   | Usage                                |
+|----------------------|-----------------------------------------------|--------------------------------------|
+| `flask init`         | Creates and initializes the database.         | `flask init`                         |
+| `flask test user`    | Runs User tests (Unit/Integration).           | `flask test user [type]`             |
+| `flask test student` | Runs Student tests (Unit/Integration).        | `flask test student [type]`          |
+| `flask test review`  | Runs Review tests (Unit/Integration).         | `flask test review [type]`           |
+| `flask test all`     | Runs all tests sequentially.                  | `flask test all`                     |
+| `flask test unit`    | Runs all Unit tests.                          | `flask test unit`                    |
+| `flask test int`     | Runs all Integration tests.                   | `flask test int`                     |
+| `flask help`         | Displays available commands.                  | `flask help`                         |
+

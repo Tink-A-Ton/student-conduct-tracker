@@ -56,6 +56,20 @@ def review_tests_command(type) -> None:
     run_tests(type, "ReviewUnitTests", "ReviewIntegrationTests")
 
 
+@test.command("unit", help="Runs all Unit tests")
+def run_all_unit_tests() -> None:
+    if pytest.main(["-k", "UserUnitTests"]) == 0:
+        pytest.main(["-k", "StudentUnitTests"])
+    sys.exit(pytest.main(["-k", "ReviewUnitTests"]))
+
+
+@test.command("int", help="Runs all Unit tests")
+def run_all_integration_tests() -> None:
+    if pytest.main(["-k", "UserIntegrationTests"]) == 0:
+        pytest.main(["-k", "StudentIntegrationTests"])
+    sys.exit(pytest.main(["-k", "ReviewIntegrationTests"]))
+
+
 @test.command("all", help="Runs all tests Unit and Integration")
 def run_all_tests() -> None:
     if pytest.main(["-k", "UserUnitTests"]) == 0:
