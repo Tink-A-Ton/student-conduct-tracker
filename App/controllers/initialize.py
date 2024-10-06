@@ -1,9 +1,9 @@
 import csv
+from ..database import db
 from .admin import create_admin
 from .student import create_student
 from .staff import create_staff
 from .review import create_review
-from App.database import db
 
 
 def initialize() -> None:

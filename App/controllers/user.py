@@ -1,5 +1,5 @@
-from App.models import User
-from App.database import db
+from ..models import User
+from ..database import db
 
 
 def create_user(id: str, password: str) -> User | None:

@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_cors import CORS
-from App.database import init_db
-from App.config import load_config
-from App.controllers import setup_jwt
-from App.views import views
+from .database import init_db
+from .config import load_config
+from .controllers import setup_jwt
+from .views import views
 
 
 def add_views(app: Flask) -> None:

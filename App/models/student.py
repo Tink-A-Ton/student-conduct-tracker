@@ -1,4 +1,4 @@
-from App.database import db
+from ..database import db
 
 
 class Student(db.Model):

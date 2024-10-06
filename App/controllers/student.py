@@ -1,5 +1,5 @@
-from App.database import db
-from App.models import Student
+from ..database import db
+from ..models import Student
 from sqlalchemy.exc import SQLAlchemyError
 
 

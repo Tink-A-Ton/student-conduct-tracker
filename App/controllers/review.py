@@ -1,5 +1,5 @@
-from App.database import db
-from App.models import Review
+from ..database import db
+from ..models import Review
 from .staff import get_staff
 from .student import get_student
 

@@ -1,5 +1,5 @@
 import logging, unittest
-from App.models import User, Staff, Admin
+from ..models import User, Staff, Admin
 
 LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -11,7 +11,9 @@ class UserUnitTests(unittest.TestCase):
 
     def test_hashed_password(self) -> None:
         new_user: User = User("816030000", "pass")
-        self.assertNotEqual(new_user.password, "pass", "Password should not be stored in plaintext")
+        self.assertNotEqual(
+            new_user.password, "pass", "Password should not be stored in plaintext"
+        )
 
     def test_check_password(self) -> None:
         new_user: User = User("816030000", "pass")
@@ -20,7 +22,11 @@ class UserUnitTests(unittest.TestCase):
     def test_user_get_json(self) -> None:
         new_user: User = User("816030000", "pass")
         user_json: dict[str, str] = new_user.get_json()
-        self.assertDictEqual(user_json, {"id": "816030000"}, "User JSON object does not match expected fields or values")
+        self.assertDictEqual(
+            user_json,
+            {"id": "816030000"},
+            "User JSON object does not match expected fields or values",
+        )
 
     def test_new_staff(self) -> None:
         new_staff: Staff = Staff("000003001", "pass", "Bob", "Ross")
@@ -32,8 +38,9 @@ class UserUnitTests(unittest.TestCase):
         new_staff: Staff = Staff("000003001", "pass", "Bob", "Ross")
         staff_json: dict[str, str] = new_staff.get_json()
         self.assertDictEqual(
-            staff_json, {"id": "000003001", "first_name": "Bob", "last_name": "Ross"},
-            "Staff JSON object does not match expected fields or values"
+            staff_json,
+            {"id": "000003001", "first_name": "Bob", "last_name": "Ross"},
+            "Staff JSON object does not match expected fields or values",
         )
 
     def test_new_admin(self) -> None:

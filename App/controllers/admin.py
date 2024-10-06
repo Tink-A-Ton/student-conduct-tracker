@@ -1,5 +1,5 @@
 from ..models import Admin
-from App.database import db
+from ..database import db
 from sqlalchemy.exc import SQLAlchemyError
 
 

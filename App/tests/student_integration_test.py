@@ -2,8 +2,8 @@ from typing import Generator
 from flask import Flask
 from flask.testing import FlaskClient
 import pytest, logging, unittest
-from App.main import create_app
-from App.database import db, create_db
+from ..main import create_app
+from ..database import db, create_db
 from ..controllers import (
     create_student,
     get_all_students,

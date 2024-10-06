@@ -1,5 +1,5 @@
-from App.models.staff import Staff
-from App.database import db
+from ..models.staff import Staff
+from ..database import db
 from sqlalchemy.exc import SQLAlchemyError
 
 

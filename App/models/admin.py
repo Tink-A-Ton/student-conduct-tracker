@@ -1,5 +1,5 @@
 from .user import User
-from App.database import db
+from ..database import db
 
 
 class Admin(User):

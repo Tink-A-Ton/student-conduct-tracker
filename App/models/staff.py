@@ -1,5 +1,5 @@
-from App.database import db
-from App.models.user import User
+from ..database import db
+from ..models.user import User
 
 
 class Staff(User):

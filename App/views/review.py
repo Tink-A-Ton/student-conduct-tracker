@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask.wrappers import Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..controllers import get_all_reviews, create_review, get_student_reviews, get_review
-from App.models import Review
+from ..models import Review
 
 review = Blueprint("review", __name__)
 
@@ -25,7 +25,7 @@ def search_student_reviews(student_id) -> tuple[Response, int]:
 
 @review.route("/review", methods=["POST"])
 @jwt_required()
-def create_reviews_action() -> tuple[Response, int]:
+def create_new_review() -> tuple[Response, int]:
     data = request.get_json()
     student_id: str | None = data.get("student_id")
     title: str | None = data.get("title")
@@ -37,7 +37,6 @@ def create_reviews_action() -> tuple[Response, int]:
     if not create_review(student_id, staff_id, title, rating, comment):
         return jsonify(error="Unauthorized or Invalid Data Provided"), 401
     return jsonify(message="Review created"), 201
-
 
 @review.route("/review/<id>", methods=["GET"])
 @jwt_required()

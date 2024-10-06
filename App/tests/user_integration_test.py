@@ -2,9 +2,9 @@ from flask import Flask
 from flask.testing import FlaskClient
 import pytest, logging, unittest
 from typing import Generator
-from App.main import create_app
-from App.database import db, create_db
-from App.models import User
+from ..main import create_app
+from ..database import db, create_db
+from ..models import User
 from ..controllers import (
     get_all_users,
     get_user,

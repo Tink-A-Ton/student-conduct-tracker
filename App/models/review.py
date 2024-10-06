@@ -1,5 +1,5 @@
 from datetime import datetime
-from App.database import db
+from ..database import db
 
 
 class Review(db.Model):
