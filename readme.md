@@ -8,13 +8,13 @@ A command-line interface for staff to provide reports on students, including a s
 
 ## Todo
 - [ ] Finish Read Me
-- [ ] Delete Test db once done with test
-- [ ] Add pretty print to help commands display
-- [ ] Refactor
-- [ ] Update python version of project to sustain our types
 - [ ] Ensure no missing dependencies for project in req.txt
 - [ ] Add more inital data for db
 
+- [x] Update python version of project to sustain our types
+- [x] Add pretty print to help commands display
+- [x] Delete Test db once done with test
+- [x] Refactor
 - [x] add error handling
 - [x] phase out .App usage
 - [x] Make User abstract

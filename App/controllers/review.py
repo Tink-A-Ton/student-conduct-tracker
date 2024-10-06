@@ -4,7 +4,9 @@ from .staff import get_staff
 from .student import get_student
 
 
-def create_review(student_id: str, staff_id: str, title: str, rating: int, comment: str) -> bool:
+def create_review(
+    student_id: str, staff_id: str, title: str, rating: int, comment: str
+) -> bool:
     if get_student(student_id) is None:
         print("Invalid student ID.")
         return False
@@ -16,7 +18,7 @@ def create_review(student_id: str, staff_id: str, title: str, rating: int, comme
     if rating < 1 or rating > 10:
         print("Rating must be between 1 (Very Poor) and 10 (Excellent)")
         return False
-    
+
     if title is None or title == "":
         print("Title is required for a review")
         return False
