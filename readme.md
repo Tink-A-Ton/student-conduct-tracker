@@ -8,9 +8,9 @@ A command-line interface for staff to provide reports on students, including a s
 
 ## Todo
 - [ ] Finish Read Me
-- [ ] Ensure no missing dependencies for project in req.txt
 - [ ] Add more inital data for db
 
+- [x] Ensure no missing dependencies for project in req.txt
 - [x] Update python version of project to sustain our types
 - [x] Add pretty print to help commands display
 - [x] Delete Test db once done with test
