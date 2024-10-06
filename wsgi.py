@@ -63,7 +63,7 @@ def run_all_unit_tests() -> None:
     sys.exit(pytest.main(["-k", "ReviewUnitTests"]))
 
 
-@test.command("int", help="Runs all Unit tests")
+@test.command("int", help="Runs all Integration tests")
 def run_all_integration_tests() -> None:
     if pytest.main(["-k", "UserIntegrationTests"]) == 0:
         pytest.main(["-k", "StudentIntegrationTests"])
