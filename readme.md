@@ -1,5 +1,5 @@
 # Student Conduct Tracker
-Flask application designed using the **Model-View-Controller (MVC)** architecture. This app allows for 
+Flask application designed using the **Model-View-Controller (MVC)** architecture.<br/>It allows staff to create and view student reviews.
 
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
@@ -73,7 +73,7 @@ Routes for server can be tested via [postman](postmanlinkhere)
 
 ## Model Diagram 
 
-The model diagram denotes a User class that is inherited by Admin and Staff, along with a Student data class. Staff write Reviews for Students, while Admins add new Students to the system.
+The model diagram denotes a User class that is inherited by Admin and Staff, along with a Student data class.<br/>Staff write Reviews for Students, while Admins add new Students to the system.
 
 <img src="https://imgur.com/BeUcGZM.png" alt="Model Diagram" height="500"/>
 
