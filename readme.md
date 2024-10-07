@@ -67,7 +67,7 @@ Flask application designed using the **Model-View-Controller (MVC)** architectur
 4. ```/review/<id> [GET]``` : Retrieve a review by ID.
 
 
-Routes for server can be tested via [postman](postmanlinkhere)
+Routes for server can be tested via [postman](https://documenter.getpostman.com/view/26820239/2sAXxMhE3D)
 
 
 
