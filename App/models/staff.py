@@ -1,6 +1,5 @@
-from werkzeug.security import check_password_hash
-from App.database import db
-from App.models.user import User
+from ..database import db
+from ..models.user import User
 
 
 class Staff(User):
@@ -14,8 +13,7 @@ class Staff(User):
         self.first_name: str = first_name
         self.last_name: str = last_name
 
-    def __repr__(self) -> str:
-        return f"{self.first_name} {self.last_name}"
-
-    def check_password(self, password) -> bool:
-        return check_password_hash(self.password, password)
+    def get_json(self) -> dict[str, str]:
+        data: dict[str, str] = super().get_json()
+        data.update({"first_name": self.first_name, "last_name": self.last_name})
+        return data

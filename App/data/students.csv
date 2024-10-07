@@ -1,15 +1,73 @@
 student_id,firstname,lastname,programme
-81600000,James,Smith,Bachelor of Science in Information Technology
-81600001,Olivia,Brown,Bachelor of Science in Computer Science (Special)
-81600002,Liam,Johnson,Bachelor of Science in Information Technology (Special)
-81600003,Emma,Williams,Bachelor of Science in Software Engineering
-81600004,Mia,Davis,Bachelor of Science in Computer Science (Special)
-81600005,Benjamin,Rodriguez,Master of Business Administration (MBA)
-81600006,El,Martinez,Bachelor of Science in Electrical Engineering
-81600007,Ethan,Smith,Bachelor of Science in Environmental Science
-81600008,Amelia,Clark,Bachelor of Education in Early Childhood Education
-81600009,Mason,Lopez,Bachelor of Science in Chemistry
-81600010,Sophia,Lee,Master of Science in Data Analytics
-81600011,Logan,Hernandez,Bachelor of Science in Chemistry
-81600012,Ava,Thompson,Bachelor of Science in Computer Science (Special)
-81600013,Ella,Martinez,Bachelor of Fine Arts in Graphic Design
+816000000,James,Smith,Bachelor of Science in Information Technology
+816000001,Olivia,Brown,Bachelor of Science in Computer Science (Special)
+816000002,Liam,Johnson,Bachelor of Science in Information Technology (Special)
+816000003,Emma,Williams,Bachelor of Science in Software Engineering
+816000004,Mia,Davis,Bachelor of Science in Computer Science (Special)
+816000005,Benjamin,Rodriguez,Master of Business Administration (MBA)
+816000006,El,Martinez,Bachelor of Science in Electrical Engineering
+816000007,Ethan,Smith,Bachelor of Science in Environmental Science
+816000008,Amelia,Clark,Bachelor of Education in Early Childhood Education
+816000009,Mason,Lopez,Bachelor of Science in Chemistry
+816000010,Sophia,Lee,Master of Science in Data Analytics
+816000011,Logan,Hernandez,Bachelor of Science in Chemistry
+816000012,Ava,Thompson,Bachelor of Science in Computer Science (Special)
+816000013,Ella,Martinez,Bachelor of Fine Arts in Graphic Design
+816000014,Alexander,Garcia,Bachelor of Science in Information Systems
+816000015,Isabella,Miller,Bachelor of Science in Biomedical Engineering
+816000016,Jacob,Taylor,Bachelor of Science in Civil Engineering
+816000017,Mia,Murphy,Bachelor of Science in Software Engineering
+816000018,Lucas,Anderson,Bachelor of Science in Environmental Science
+816000019,Charlotte,Thomas,Bachelor of Science in Information Technology
+816000020,Daniel,Robinson,Master of Science in Artificial Intelligence
+816000021,Evelyn,Moore,Bachelor of Science in Computer Science (Special)
+816000022,Henry,Walker,Bachelor of Science in Cybersecurity
+816000023,Scarlett,Harris,Bachelor of Science in Mechanical Engineering
+816000024,Michael,Nelson,Master of Business Administration (MBA)
+816000025,Sophia,Carter,Bachelor of Science in Information Systems
+816000026,Emily,Mitchell,Bachelor of Science in Data Science
+816000027,William,Young,Master of Science in Software Engineering
+816000028,Dmitri,Lezama,Bachelor of Science in Computer Science (Special)
+816000029,Luna,Green,Bachelor of Science in Electrical Engineering
+816000030,Sebastian,Adams,Bachelor of Science in Mathematics
+816000031,Harper,Baker,Bachelor of Science in Environmental Science
+816000032,Elijah,Hill,Bachelor of Science in Software Engineering
+816000033,Grace,Parker,Bachelor of Science in Information Technology
+816000034,Matthew,Cox,Master of Science in Data Analytics
+816000035,Avery,Reed,Bachelor of Science in Cybersecurity
+816000036,Lucas,Wood,Bachelor of Science in Information Systems
+816000037,Chloe,Cooper,Bachelor of Science in Computer Science (Special)
+816000038,Jack,Peterson,Bachelor of Science in Civil Engineering
+816000039,Sophie,Bell,Bachelor of Science in Environmental Science
+816000040,Ethan,Morris,Bachelor of Science in Chemistry
+816000041,Victoria,Richardson,Master of Business Administration (MBA)
+816000042,James,Cook,Bachelor of Science in Electrical Engineering
+816000043,Hannah,Bailey,Bachelor of Science in Information Technology
+816000044,Oliver,Howard,Bachelor of Science in Computer Science (Special)
+816000045,Lily,King,Bachelor of Science in Information Systems
+816000046,Jackson,Wright,Bachelor of Science in Cybersecurity
+816000047,Mia,Evans,Bachelor of Science in Software Engineering
+816000048,Thomas,Nelson,Bachelor of Science in Environmental Science
+816000049,Emma,Ward,Master of Science in Artificial Intelligence
+816000050,Benjamin,Hughes,Bachelor of Science in Civil Engineering
+816000051,Ella,Turner,Bachelor of Science in Information Technology
+816000052,Alexander,Phillips,Master of Business Administration (MBA)
+816000053,Isabella,Campbell,Bachelor of Science in Mechanical Engineering
+816000054,Jacob,Parker,Bachelor of Science in Data Science
+816000055,Sophia,Collins,Bachelor of Science in Computer Science (Special)
+816000056,Charlotte,Stewart,Bachelor of Science in Electrical Engineering
+816000057,Liam,Morris,Bachelor of Science in Environmental Science
+816000058,Mason,Rogers,Bachelor of Science in Chemistry
+816000059,Emily,Reed,Master of Science in Data Analytics
+8160000600,Logan,Carter,Bachelor of Science in Information Systems
+816000061,Scarlett,Jenkins,Bachelor of Science in Cybersecurity
+816000062,Henry,Kelly,Bachelor of Science in Mechanical Engineering
+816000063,Evelyn,Bennett,Bachelor of Science in Computer Science (Special)
+816000064,Lucas,Ross,Bachelor of Science in Information Technology
+816000065,Grace,Henderson,Bachelor of Science in Software Engineering
+816000066,Elijah,Griffin,Master of Business Administration (MBA)
+816000067,Victoria,Hayes,Bachelor of Science in Electrical Engineering
+816000068,Michael,Bryant,Bachelor of Science in Environmental Science
+816000069,Daniel,Fisher,Bachelor of Science in Civil Engineering
+816000070,Chloe,Barnes,Bachelor of Science in Information Systems
+
