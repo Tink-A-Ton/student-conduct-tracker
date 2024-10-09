@@ -40,7 +40,7 @@ def create_new_review() -> tuple[Response, int]:
         return jsonify(error="Data missing"), 401
     staff_id: str = get_jwt_identity()
     if not create_review(student_id, staff_id, title, rating, comment):
-        return jsonify(error="Unauthorized or Invalid Data Provided"), 401
+        return jsonify(error="Unauthorized or Invalid Data Provided"), 400
     return jsonify(message="Review created"), 201
 
 
