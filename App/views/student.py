@@ -44,6 +44,13 @@ def add_student() -> tuple[Response, int]:
     if not admin:
         return jsonify(error="Unauthorized"), 401
     data = request.get_json()
+    if not (
+        data.get("id")
+        and data.get("first_name")
+        and data.get("last_name")
+        and data.get("programme")
+    ):
+        return jsonify(error="Missing required fields"), 400
     created: bool = create_student(
         data["id"], data["first_name"], data["last_name"], data["programme"]
     )
