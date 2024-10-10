@@ -1,0 +1,3032 @@
+{
+	"info": {
+		"_postman_id": "38f539d5-03ef-47d2-a272-6b5aa67c2abf",
+		"name": "StudentReviews",
+		"description": "Full Test Suite for Student Reviews Repository",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38780041",
+		"_collection_link": "https://planetary-spaceship-763780.postman.co/workspace/ce0c5d04-b0e1-4e59-b82b-bf132cc03c14/collection/26820239-38f539d5-03ef-47d2-a272-6b5aa67c2abf?action=share&source=collection_link&creator=38780041"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Staff Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains login status\", function () {\r",
+									"    pm.expect(response).to.have.property(\"login\", true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JWT cookie is set in the response\", function () {\r",
+									"    const jwt=pm.cookies.get('access_token')\r",
+									"    pm.expect(jwt).to.not.be.undefined;\r",
+									"    pm.environment.set(\"jwt_staff\",jwt)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has 'Set-Cookie' header\", function () {\r",
+									"    pm.response.to.have.header(\"Set-Cookie\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid credentials should return 401\", function () {\r",
+									"    if (pm.request.body.mode === \"raw\") {\r",
+									"        let data = JSON.parse(pm.request.body.raw);\r",
+									"        if (data.id === \"<invalid_id>\" || data.password === \"<invalid_password>\") \r",
+									"            pm.response.to.have.status(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response status code is 200 after successful login\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{staff_id}}\",\r\n    \"password\": \"{{staff_password}}\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Used to authenticate Staff"
+					},
+					"response": [
+						{
+							"name": "Staff Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"000000611\",\r\n    \"password\": \"password\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/login",
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:39:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "20"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyODI3NTk5NSwianRpIjoiYThiYzU1ZjItYmZlYi00NjEyLTk2M2MtZmVmMDJlZmQ3YmJiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjAwMDAwMDYxMSIsIm5iZiI6MTcyODI3NTk5NSwiZXhwIjoxNzI4Mjc2ODk1fQ.H8K3UtsY5jZqzYCy58LLjd7F0ZQqqs3fpZQcHmp5IMo; Secure; HttpOnly; Path=/"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"login\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Staff Login - Invalid Credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response code is 401\", function() {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates invalid credentials\", function() {\r",
+									"        pm.expect(response.error).to.equal(\"Invalid credentials\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 400) {\r",
+									"    pm.test(\"Response code is 400\", function() {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates missing data\", function() {\r",
+									"        pm.expect(response.error).to.equal(\"Data missing\");\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{incorrect_staff_id}}\",\r\n    \"password\": \"{{incorrect_staff_password}}\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Returns an error when sent with invalid credentials"
+					},
+					"response": [
+						{
+							"name": "Staff Login - Invalid Credentials",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"000000733\",\r\n    \"password\": \"coolpassword\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/login",
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 23:33:18 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Invalid credentials\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains login status\", function () {\r",
+									"    pm.expect(response).to.have.property(\"login\", true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JWT cookie is set in the response\", function () {\r",
+									"    const jwt=pm.cookies.get('access_token')\r",
+									"    pm.expect(jwt).to.not.be.undefined;\r",
+									"    pm.environment.set(\"jwt_admin\",jwt)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has 'Set-Cookie' header\", function () {\r",
+									"    pm.response.to.have.header(\"Set-Cookie\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Invalid credentials should return 401\", function () {\r",
+									"    if (pm.request.body.mode === \"raw\") {\r",
+									"        let data = JSON.parse(pm.request.body.raw);\r",
+									"        if (data.id === \"<invalid_id>\" || data.password === \"<invalid_password>\") \r",
+									"            pm.response.to.have.status(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test to verify the response status code is 200 after a successful login\r",
+									"pm.test(\"Response status code is 200 after successful login\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{admin_id}}\",\r\n    \"password\": \"{{admin_password}}\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Used to authenticate Admin"
+					},
+					"response": [
+						{
+							"name": "Admin Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"000000811\",\r\n    \"password\": \"password\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/login",
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:43:31 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "20"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyODI3NjIxMSwianRpIjoiOWFkY2U4OGUtNjM2Ny00MTAzLTk0YzAtN2Q2ZWQ0MjVkN2NlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjAwMDAwMDgxMSIsIm5iZiI6MTcyODI3NjIxMSwiZXhwIjoxNzI4Mjc3MTExfQ.r7jmNDZKIZ87ppzCz739lYFawtovGnTprDJc6NDgsds; Secure; HttpOnly; Path=/"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"login\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Admin Login - Invalid Credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response code is 401\", function() {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates invalid credentials\", function() {\r",
+									"        pm.expect(response.error).to.equal(\"Invalid credentials\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 400) {\r",
+									"    pm.test(\"Response code is 400\", function() {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates missing data\", function() {\r",
+									"        pm.expect(response.error).to.equal(\"Data missing\");\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{incorrect_admin_id}}\",\r\n    \"password\": \"{{incorrect_admin_password}}\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Returns an error when sent with invalid credentials"
+					},
+					"response": [
+						{
+							"name": "Admin Login - Invalid Credentials",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"\",\r\n    \"password\": \"coolpassword\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/login",
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 23:33:31 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Invalid credentials\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.text(); \r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () { \r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains logout status\", function () {\r",
+									"    pm.expect(response).to.include(\"logout\"); \r",
+									"});\r",
+									"\r",
+									"// pm.test(\"JWT access token cookie is unset in the response\", function () {\r",
+									"//     pm.expect(pm.cookies.has('access_token')).to.be.false; \r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Refresh token cookie is unset in the response\", function () {\r",
+									"//     pm.expect(pm.cookies.has('refresh_token_cookie')).to.be.false; \r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Response has 'Set-Cookie' header for unsetting JWT\", function () {\r",
+									"//     pm.response.to.have.header(\"Set-Cookie\"); \r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Access token cookie is set to expire\", function () {\r",
+									"//     const setCookieHeaders = pm.response.headers.filter(header => header.key === 'Set-Cookie');\r",
+									"//     const accessTokenCookieHeader = setCookieHeaders.find(header => header.value.includes('access_token='));\r",
+									"\r",
+									"//     pm.expect(accessTokenCookieHeader).to.not.be.undefined; \r",
+									"//     pm.expect(accessTokenCookieHeader.value).to.include(\"Expires=Thu, 01 Jan 1970 00:00:00 GMT\");\r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Cookies have Secure and HttpOnly attributes\", function () {\r",
+									"//     const setCookieHeaders = pm.response.headers.filter(header => header.key === 'Set-Cookie');\r",
+									"//     setCookieHeaders.forEach(cookieHeader => {\r",
+									"//         pm.expect(cookieHeader.value).to.include(\"Secure\"); \r",
+									"//         pm.expect(cookieHeader.value).to.include(\"HttpOnly\");\r",
+									"//     });\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"logout"
+							]
+						},
+						"description": "Used to log an authenticated user out of the system."
+					},
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "/logout",
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 08 Oct 2024 14:53:06 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "21"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "access_token=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Path=/"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "refresh_token_cookie=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Path=/"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"logout\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "All Authentication EndPoints"
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Get All Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response is an array\", function () {\r",
+									"        pm.expect(response).to.be.an('array');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response array is not empty\", function () {\r",
+									"        pm.expect(response.length).to.be.greaterThan(0);\r",
+									"    });\r",
+									"\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/reviews",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"reviews"
+							]
+						},
+						"description": "This endpoint retrieves all student reviews."
+					},
+					"response": [
+						{
+							"name": "Get All Reviews",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/reviews",
+									"path": [
+										"reviews"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 14:34:58 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "17276"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"comment\": \"Excellent work and consistent effort throughout the semester. Always prepared and engaged.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 1,\n        \"rating\": 5,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000000\",\n        \"title\": \"Outstanding Student\"\n    },\n    {\n        \"comment\": \"Needs significant improvement in communication skills and teamwork.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 2,\n        \"rating\": 2,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000000\",\n        \"title\": \"Needs Improvement\"\n    },\n    {\n        \"comment\": \"Shows dedication and improvement, though there's room for growth in time management.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 3,\n        \"rating\": 4,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Hard Worker\"\n    },\n    {\n        \"comment\": \"Solid performance but can improve focus and attention to detail.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 4,\n        \"rating\": 3,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Solid Performer\"\n    },\n    {\n        \"comment\": \"Demonstrates excellent problem-solving abilities and a proactive attitude.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 5,\n        \"rating\": 5,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000002\",\n        \"title\": \"Exceptional Problem Solver\"\n    },\n    {\n        \"comment\": \"Performance is average, and there's potential to perform at a higher level with more effort.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 6,\n        \"rating\": 3,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000002\",\n        \"title\": \"Average Performer\"\n    },\n    {\n        \"comment\": \"Displays a solid understanding of the material but could participate more in discussions.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 7,\n        \"rating\": 4,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000003\",\n        \"title\": \"Good Understanding\"\n    },\n    {\n        \"comment\": \"Struggles with staying on task and completing assignments on time.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 8,\n        \"rating\": 1,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000003\",\n        \"title\": \"Needs Attention\"\n    },\n    {\n        \"comment\": \"Good work overall, but sometimes struggles with meeting deadlines. However, improved towards the end.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 9,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Improved Over Time\"\n    },\n    {\n        \"comment\": \"Average performance. Needs to participate more in discussions and seek clarification when confused.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 10,\n        \"rating\": 3,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000002\",\n        \"title\": \"Average Engagement\"\n    },\n    {\n        \"comment\": \"Outstanding contributions and always eager to assist others. Demonstrates leadership qualities.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 11,\n        \"rating\": 5,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000003\",\n        \"title\": \"Leader\"\n    },\n    {\n        \"comment\": \"Shows great promise. Active participation in class but needs to polish written assignments.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 12,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000000\",\n        \"title\": \"Promising Student\"\n    },\n    {\n        \"comment\": \"An exceptional student. Always prepared, proactive, and ready to contribute in group projects.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 13,\n        \"rating\": 5,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000002\",\n        \"title\": \"Exceptional Student\"\n    },\n    {\n        \"comment\": \"Outstanding performance and engagement in all activities. A true team player.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 14,\n        \"rating\": 5,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000004\",\n        \"title\": \"Team Player\"\n    },\n    {\n        \"comment\": \"Shows great potential but should work on time management.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 15,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000004\",\n        \"title\": \"Potential Star\"\n    },\n    {\n        \"comment\": \"Good understanding of the material, but needs to improve participation.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 16,\n        \"rating\": 3,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000005\",\n        \"title\": \"Needs More Participation\"\n    },\n    {\n        \"comment\": \"Solid performance with consistent improvement. Could benefit from additional focus.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 17,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000005\",\n        \"title\": \"Consistent Performer\"\n    },\n    {\n        \"comment\": \"Excellent contributions in class discussions. Always willing to help peers.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 18,\n        \"rating\": 5,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000006\",\n        \"title\": \"Class Contributor\"\n    },\n    {\n        \"comment\": \"Needs improvement in assignment submissions and communication.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 19,\n        \"rating\": 2,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000006\",\n        \"title\": \"Communication Issues\"\n    },\n    {\n        \"comment\": \"Displays a good grasp of concepts but should engage more with classmates.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 20,\n        \"rating\": 4,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000007\",\n        \"title\": \"Good Grasp of Concepts\"\n    },\n    {\n        \"comment\": \"Average performance; showing some improvement but needs more effort.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 21,\n        \"rating\": 3,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000008\",\n        \"title\": \"Average Student\"\n    },\n    {\n        \"comment\": \"Exceptional ability to grasp complex topics and articulate thoughts clearly.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 22,\n        \"rating\": 5,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000009\",\n        \"title\": \"Exceptional Grasp of Topics\"\n    },\n    {\n        \"comment\": \"Good performance, but needs to ask for help when confused.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 23,\n        \"rating\": 3,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000009\",\n        \"title\": \"Needs to Seek Help\"\n    },\n    {\n        \"comment\": \"Excellent work and consistent effort throughout the semester. Always prepared and engaged.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 24,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000000\",\n        \"title\": \"Outstanding Student\"\n    },\n    {\n        \"comment\": \"Needs significant improvement in communication skills and teamwork.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 25,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Needs Improvement\"\n    },\n    {\n        \"comment\": \"Shows dedication and improvement, though there's room for growth in time management.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 26,\n        \"rating\": 8,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000002\",\n        \"title\": \"Hard Worker\"\n    },\n    {\n        \"comment\": \"Solid performance but can improve focus and attention to detail.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 27,\n        \"rating\": 6,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000003\",\n        \"title\": \"Solid Performer\"\n    },\n    {\n        \"comment\": \"Demonstrates excellent problem-solving abilities and a proactive attitude.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 28,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000004\",\n        \"title\": \"Exceptional Problem Solver\"\n    },\n    {\n        \"comment\": \"Performance is average, and there's potential to perform at a higher level with more effort.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 29,\n        \"rating\": 6,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000005\",\n        \"title\": \"Average Performer\"\n    },\n    {\n        \"comment\": \"Displays a solid understanding of the material but could participate more in discussions.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 30,\n        \"rating\": 8,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000006\",\n        \"title\": \"Good Understanding\"\n    },\n    {\n        \"comment\": \"Struggles with staying on task and completing assignments on time.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 31,\n        \"rating\": 2,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000007\",\n        \"title\": \"Needs Attention\"\n    },\n    {\n        \"comment\": \"Good work overall, but sometimes struggles with meeting deadlines. However, improved towards the end.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 32,\n        \"rating\": 8,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000008\",\n        \"title\": \"Improved Over Time\"\n    },\n    {\n        \"comment\": \"Average performance. Needs to participate more in discussions and seek clarification when confused.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 33,\n        \"rating\": 6,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000009\",\n        \"title\": \"Average Engagement\"\n    },\n    {\n        \"comment\": \"Outstanding contributions and always eager to assist others. Demonstrates leadership qualities.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 34,\n        \"rating\": 10,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000010\",\n        \"title\": \"Leader\"\n    },\n    {\n        \"comment\": \"Shows great promise. Active participation in class but needs to polish written assignments.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 35,\n        \"rating\": 8,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000011\",\n        \"title\": \"Promising Student\"\n    },\n    {\n        \"comment\": \"An exceptional student. Always prepared, proactive, and ready to contribute in group projects.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 36,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000012\",\n        \"title\": \"Exceptional Student\"\n    },\n    {\n        \"comment\": \"Outstanding performance and engagement in all activities. A true team player.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 37,\n        \"rating\": 10,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000013\",\n        \"title\": \"Team Player\"\n    },\n    {\n        \"comment\": \"Shows great potential but should work on time management.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 38,\n        \"rating\": 8,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000014\",\n        \"title\": \"Potential Star\"\n    },\n    {\n        \"comment\": \"Good understanding of the material, but needs to improve participation.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 39,\n        \"rating\": 6,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000015\",\n        \"title\": \"Needs More Participation\"\n    },\n    {\n        \"comment\": \"Solid performance with consistent improvement. Could benefit from additional focus.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 40,\n        \"rating\": 8,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000016\",\n        \"title\": \"Consistent Performer\"\n    },\n    {\n        \"comment\": \"Excellent contributions in class discussions. Always willing to help peers.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 41,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000017\",\n        \"title\": \"Class Contributor\"\n    },\n    {\n        \"comment\": \"Needs improvement in assignment submissions and communication.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 42,\n        \"rating\": 4,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000018\",\n        \"title\": \"Communication Issues\"\n    },\n    {\n        \"comment\": \"Displays a good grasp of concepts but should engage more with classmates.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 43,\n        \"rating\": 8,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000019\",\n        \"title\": \"Good Grasp of Concepts\"\n    },\n    {\n        \"comment\": \"Average performance; showing some improvement but needs more effort.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 44,\n        \"rating\": 6,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000020\",\n        \"title\": \"Average Student\"\n    },\n    {\n        \"comment\": \"Exceptional ability to grasp complex topics and articulate thoughts clearly.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 45,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000021\",\n        \"title\": \"Exceptional Grasp of Topics\"\n    },\n    {\n        \"comment\": \"Good performance, but needs to ask for help when confused.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 46,\n        \"rating\": 6,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000022\",\n        \"title\": \"Needs to Seek Help\"\n    },\n    {\n        \"comment\": \"Consistently brings creative and innovative ideas to group discussions.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 47,\n        \"rating\": 9,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000023\",\n        \"title\": \"Creative Thinker\"\n    },\n    {\n        \"comment\": \"Shows potential but inconsistent effort and focus across assignments.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 48,\n        \"rating\": 5,\n        \"staff_id\": \"000000623\",\n        \"student_id\": \"816000024\",\n        \"title\": \"Inconsistent Effort\"\n    },\n    {\n        \"comment\": \"Struggles to stay on task without guidance but has shown some improvement.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 49,\n        \"rating\": 3,\n        \"staff_id\": \"000000627\",\n        \"student_id\": \"816000025\",\n        \"title\": \"Needs Guidance\"\n    },\n    {\n        \"comment\": \"Shows leadership qualities and a strong grasp of complex topics.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 50,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000026\",\n        \"title\": \"Exceptional Student\"\n    },\n    {\n        \"comment\": \"Has room for growth in time management and collaboration skills.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 51,\n        \"rating\": 6,\n        \"staff_id\": \"000000621\",\n        \"student_id\": \"816000027\",\n        \"title\": \"Average Performer\"\n    },\n    {\n        \"comment\": \"Dmitri is an egg. Must work on bettering himself.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 52,\n        \"rating\": 1,\n        \"staff_id\": \"000000620\",\n        \"student_id\": \"816000028\",\n        \"title\": \"Egg\"\n    },\n    {\n        \"comment\": \"Has shown significant improvement over the course of the semester.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 53,\n        \"rating\": 8,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000029\",\n        \"title\": \"Great Improvement\"\n    },\n    {\n        \"comment\": \"Always prepared and consistently performs at a high level.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 54,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000030\",\n        \"title\": \"Outstanding Performance\"\n    },\n    {\n        \"comment\": \"Works well with peers and consistently contributes to group tasks.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 55,\n        \"rating\": 7,\n        \"staff_id\": \"000000629\",\n        \"student_id\": \"816000031\",\n        \"title\": \"Good Collaborator\"\n    },\n    {\n        \"comment\": \"Proactively tackles complex problems and offers well-thought-out solutions.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 56,\n        \"rating\": 9,\n        \"staff_id\": \"000000614\",\n        \"student_id\": \"816000032\",\n        \"title\": \"Exceptional Problem Solver\"\n    },\n    {\n        \"comment\": \"Performance could improve with more attention to detail and focus.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 57,\n        \"rating\": 5,\n        \"staff_id\": \"000000630\",\n        \"student_id\": \"816000033\",\n        \"title\": \"Needs More Focus\"\n    },\n    {\n        \"comment\": \"Actively participates in class and shows genuine interest in learning.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 58,\n        \"rating\": 8,\n        \"staff_id\": \"000000613\",\n        \"student_id\": \"816000034\",\n        \"title\": \"Engaged Learner\"\n    },\n    {\n        \"comment\": \"Engages with the material, though there's room for more active participation.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 59,\n        \"rating\": 6,\n        \"staff_id\": \"000000625\",\n        \"student_id\": \"816000035\",\n        \"title\": \"Average Engagement\"\n    },\n    {\n        \"comment\": \"Shows great potential to lead group projects but needs more confidence.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 60,\n        \"rating\": 9,\n        \"staff_id\": \"000000628\",\n        \"student_id\": \"816000036\",\n        \"title\": \"Potential Leader\"\n    },\n    {\n        \"comment\": \"Contributes meaningfully to group work and class discussions.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 61,\n        \"rating\": 9,\n        \"staff_id\": \"000000618\",\n        \"student_id\": \"816000037\",\n        \"title\": \"Strong Contributor\"\n    },\n    {\n        \"comment\": \"Struggles with clear communication but demonstrates effort to improve.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 62,\n        \"rating\": 4,\n        \"staff_id\": \"000000616\",\n        \"student_id\": \"816000038\",\n        \"title\": \"Needs to Improve Communication\"\n    },\n    {\n        \"comment\": \"Consistently works well with peers and adds value to group projects.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 63,\n        \"rating\": 8,\n        \"staff_id\": \"000000619\",\n        \"student_id\": \"816000039\",\n        \"title\": \"Team Player\"\n    },\n    {\n        \"comment\": \"Has steadily improved over the semester, though further growth is needed.\",\n        \"created_at\": \"08/10/2024, 01:16 PM\",\n        \"id\": 64,\n        \"rating\": 7,\n        \"staff_id\": \"000000626\",\n        \"student_id\": \"816000040\",\n        \"title\": \"Steady Improvement\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get All Reviews - Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.equal(\"Unauthorized\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/reviews",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"reviews"
+							]
+						},
+						"description": "Responds with \"Unauthorized\" if credentials are invalid"
+					},
+					"response": [
+						{
+							"name": "Get All Reviews - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/reviews",
+									"path": [
+										"reviews"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 22:25:19 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "12"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "Unauthorized"
+						}
+					]
+				},
+				{
+					"name": "Get Student Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response is an array\", function () {\r",
+									"        pm.expect(response).to.be.an('array');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response array is not empty\", function () {\r",
+									"        pm.expect(response.length).to.be.greaterThan(0);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Each review has required fields\", function () {\r",
+									"        response.forEach(function (review) {\r",
+									"            pm.expect(review).to.include.keys('id', 'staff_id', 'student_id', 'title', 'rating', 'comment', 'created_at');\r",
+									"            pm.expect(review.rating).to.be.a('number');\r",
+									"            pm.expect(new Date(review.created_at)).to.not.be.NaN;\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Response status code is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates reviews not found\", function () {\r",
+									"        pm.expect(pm.response.json().error).to.equal(\"Reviews not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/reviews/{{student_review_student_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"reviews",
+								"{{student_review_student_id}}"
+							]
+						},
+						"description": "Retrieves all reviews for a specific student, identified by the student ID provided in the path parameter."
+					},
+					"response": [
+						{
+							"name": "Get Student Reviews",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/reviews/816000001",
+									"path": [
+										"reviews",
+										"816000001"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 08 Oct 2024 14:54:12 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1085"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"comment\": \"Shows dedication and improvement, though there's room for growth in time management.\",\n        \"created_at\": \"07/10/2024, 09:51 PM\",\n        \"id\": 3,\n        \"rating\": 4,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Hard Worker\"\n    },\n    {\n        \"comment\": \"Solid performance but can improve focus and attention to detail.\",\n        \"created_at\": \"07/10/2024, 09:51 PM\",\n        \"id\": 4,\n        \"rating\": 3,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Solid Performer\"\n    },\n    {\n        \"comment\": \"Good work overall, but sometimes struggles with meeting deadlines. However, improved towards the end.\",\n        \"created_at\": \"07/10/2024, 09:51 PM\",\n        \"id\": 9,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Improved Over Time\"\n    },\n    {\n        \"comment\": \"Needs significant improvement in communication skills and teamwork.\",\n        \"created_at\": \"07/10/2024, 09:51 PM\",\n        \"id\": 25,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Needs Improvement\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Student Reviews - Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.equal(\"Unauthorized\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/reviews/{{student_review_student_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"reviews",
+								"{{student_review_student_id}}"
+							]
+						},
+						"description": "Responds with \"Unauthorized\" if credentials are invalid"
+					},
+					"response": [
+						{
+							"name": "Get Student Reviews - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/reviews/816000001",
+									"path": [
+										"reviews",
+										"816000001"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 22:54:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2210"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"comment\": \"Shows dedication and improvement, though there's room for growth in time management.\",\n        \"created_at\": \"09/10/2024, 05:37 PM\",\n        \"id\": 3,\n        \"rating\": 4,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Hard Worker\"\n    },\n    {\n        \"comment\": \"Solid performance but can improve focus and attention to detail.\",\n        \"created_at\": \"09/10/2024, 05:37 PM\",\n        \"id\": 4,\n        \"rating\": 3,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Solid Performer\"\n    },\n    {\n        \"comment\": \"Good work overall, but sometimes struggles with meeting deadlines. However, improved towards the end.\",\n        \"created_at\": \"09/10/2024, 05:37 PM\",\n        \"id\": 9,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Improved Over Time\"\n    },\n    {\n        \"comment\": \"Needs significant improvement in communication skills and teamwork.\",\n        \"created_at\": \"09/10/2024, 05:37 PM\",\n        \"id\": 25,\n        \"rating\": 4,\n        \"staff_id\": \"000000612\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Needs Improvement\"\n    },\n    {\n        \"comment\": \"Good student would recommmend them.\",\n        \"created_at\": \"09/10/2024, 06:35 PM\",\n        \"id\": 65,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Good Student\"\n    },\n    {\n        \"comment\": \"Good student would recommmend them.\",\n        \"created_at\": \"09/10/2024, 06:36 PM\",\n        \"id\": 66,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Good Student\"\n    },\n    {\n        \"comment\": \"Good student would recommmend them.\",\n        \"created_at\": \"09/10/2024, 06:36 PM\",\n        \"id\": 67,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Good Student\"\n    },\n    {\n        \"comment\": \"Good student would recommmend them.\",\n        \"created_at\": \"09/10/2024, 06:38 PM\",\n        \"id\": 68,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Good Student\"\n    },\n    {\n        \"comment\": \"Good student would recommmend them.\",\n        \"created_at\": \"09/10/2024, 06:38 PM\",\n        \"id\": 69,\n        \"rating\": 10,\n        \"staff_id\": \"000000611\",\n        \"student_id\": \"816000001\",\n        \"title\": \"Good Student\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "GET Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response is an object\", function () {\r",
+									"        pm.expect(response).to.be.an('object');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Review has required fields\", function () {\r",
+									"        pm.expect(response).to.include.keys('id', 'staff_id', 'student_id', 'title', 'rating', 'comment', 'created_at');\r",
+									"        pm.expect(response.rating).to.be.a('number');\r",
+									"        pm.expect(new Date(response.created_at)).to.not.be.NaN;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Response status code is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates review not found\", function () {\r",
+									"        pm.expect(pm.response.json().error).to.equal(\"Review not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/review/{{review_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"review",
+								"{{review_id}}"
+							]
+						},
+						"description": "Retrieves the review details for a specific ID."
+					},
+					"response": [
+						{
+							"name": "GET Review",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/review/7",
+									"path": [
+										"review",
+										"7"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 08 Oct 2024 14:54:48 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "266"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"comment\": \"Excellent work and consistent effort throughout the semester. Always prepared and engaged.\",\n    \"created_at\": \"07/10/2024, 09:51 PM\",\n    \"id\": 1,\n    \"rating\": 5,\n    \"staff_id\": \"000000611\",\n    \"student_id\": \"816000000\",\n    \"title\": \"Outstanding Student\"\n}"
+						}
+					]
+				},
+				{
+					"name": "GET Review - Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Unauthorized response message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/review/{{review_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"review",
+								"{{review_id}}"
+							]
+						},
+						"description": "Responds with \"Unauthorized\" if credentials are invalid"
+					},
+					"response": [
+						{
+							"name": "GET Review - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/review/7",
+									"path": [
+										"review",
+										"7"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 21:50:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "12"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "Unauthorized"
+						}
+					]
+				},
+				{
+					"name": "Create Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 201\", function () {\r",
+									"        pm.response.to.have.status(201);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Success message for review creation\", function () {\r",
+									"        pm.expect(response.message).to.equal(\"Review created\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates data is missing or unauthorized\", function () {\r",
+									"        let response = pm.response.json();\r",
+									"        pm.expect(response.error).to.be.oneOf([\r",
+									"            \"Data missing\",\r",
+									"            \"Unauthorized or Invalid Data Provided\"\r",
+									"        ]);\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"student_id\": \"{{student_review_student_id}}\",\r\n  \"title\": \"{{student_review_title}}\",\r\n  \"rating\": {{student_review_rating}},\r\n  \"comment\": \"{{student_review_comment}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/review",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"review"
+							]
+						},
+						"description": "Allows a staff to create a new review for a student."
+					},
+					"response": [
+						{
+							"name": "Create Review",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"student_id\": \"816000001\",\r\n  \"title\": \"Good Student\",\r\n  \"rating\": 10,\r\n  \"comment\": \"Good student would recommmend them.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/review",
+									"path": [
+										"review"
+									]
+								}
+							},
+							"status": "CREATED",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.2"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 03:56:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "34"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Review created\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Review - Bad Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 400) {\r",
+									"    pm.test(\"Response code is 400\", function() {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"\r",
+									"    if (pm.response.headers.get('Content-Type').includes('application/json')) {\r",
+									"        let response = pm.response.json();\r",
+									"\r",
+									"        pm.test(\"Error message indicates invalid or missing data\", function() {\r",
+									"            pm.expect(response.error).to.be.oneOf([\"Unauthorized or Invalid Data Provided\", \"Data missing\"]);\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.log(\"Response is not JSON\");\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function() {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response contains error message\", function() {\r",
+									"        let responseText = pm.response.text();\r",
+									"        pm.expect(responseText).to.equal(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"student_id\": \"{{incorrect_student_id}}\",\r\n  \"title\": \"{{student_review_title}}\",\r\n  \"comment\": \"{{student_review_comment}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/review",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"review"
+							]
+						},
+						"description": "Responds with error if credentials are invalid or request body is bad"
+					},
+					"response": [
+						{
+							"name": "Create Review - Bad Data",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"student_id\": \"816000074\",\r\n  \"title\": \"Good Student\",\r\n  \"comment\": \"Good student would recommmend them.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/review",
+									"path": [
+										"review"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 10 Oct 2024 00:07:17 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "30"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Data missing\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Handles all review operations."
+		},
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "Get Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response is an object\", function () {\r",
+									"        pm.expect(response).to.be.an('object');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Student object has required fields\", function () {\r",
+									"        pm.expect(response).to.include.keys('id', 'first_name', 'last_name', 'programme');\r",
+									"        pm.expect(response.id).to.be.a('string');\r",
+									"        pm.expect(response.first_name).to.be.a('string');\r",
+									"        pm.expect(response.last_name).to.be.a('string');\r",
+									"        pm.expect(response.programme).to.be.a('string');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Response status code is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates student not found\", function () {\r",
+									"        pm.expect(pm.response.json().error).to.equal(\"Student not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/student/{{student_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"student",
+								"{{student_id}}"
+							]
+						},
+						"description": "Retrieves the details of a specific student identified by the provided student ID."
+					},
+					"response": [
+						{
+							"name": "Get Student",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/student/816037178",
+									"path": [
+										"student",
+										"816037178"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:44:42 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "148"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"first_name\": \"Liam\",\n    \"id\": \"816000002\",\n    \"last_name\": \"Johnson\",\n    \"programme\": \"Bachelor of Science in Information Technology (Special)\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Student - Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.equal(\"Unauthorized\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/student/{{student_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"student",
+								"{{student_id}}"
+							]
+						},
+						"description": "Responds with \"Unauthorized\" if credentials are invalid"
+					},
+					"response": [
+						{
+							"name": "Get Student - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/student/816037178",
+									"path": [
+										"student",
+										"816037178"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 23:05:02 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "12"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "Unauthorized"
+						}
+					]
+				},
+				{
+					"name": "Get Students",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response is an array\", function () {\r",
+									"        pm.expect(response).to.be.an('array');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response array is not empty\", function () {\r",
+									"        pm.expect(response.length).to.be.greaterThan(0);\r",
+									"    });\r",
+									"    // Check if each student object in the array has the required fields\r",
+									"    pm.test(\"Each student object has required fields\", function () {\r",
+									"        response.forEach(function (student) {\r",
+									"            pm.expect(student).to.include.keys('id', 'first_name', 'last_name', 'programme');\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Response status code is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates students not found\", function () {\r",
+									"        pm.expect(pm.response.json().error).to.equal(\"Students not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/students",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"students"
+							]
+						},
+						"description": "Retrieves a list of students."
+					},
+					"response": [
+						{
+							"name": "Get Students",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/students",
+									"path": [
+										"students"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:11:14 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "10582"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"first_name\": \"James\",\n        \"id\": \"816000000\",\n        \"last_name\": \"Smith\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    },\n    {\n        \"first_name\": \"Olivia\",\n        \"id\": \"816000001\",\n        \"last_name\": \"Brown\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Liam\",\n        \"id\": \"816000002\",\n        \"last_name\": \"Johnson\",\n        \"programme\": \"Bachelor of Science in Information Technology (Special)\"\n    },\n    {\n        \"first_name\": \"Emma\",\n        \"id\": \"816000003\",\n        \"last_name\": \"Williams\",\n        \"programme\": \"Bachelor of Science in Software Engineering\"\n    },\n    {\n        \"first_name\": \"Mia\",\n        \"id\": \"816000004\",\n        \"last_name\": \"Davis\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Benjamin\",\n        \"id\": \"816000005\",\n        \"last_name\": \"Rodriguez\",\n        \"programme\": \"Master of Business Administration (MBA)\"\n    },\n    {\n        \"first_name\": \"El\",\n        \"id\": \"816000006\",\n        \"last_name\": \"Martinez\",\n        \"programme\": \"Bachelor of Science in Electrical Engineering\"\n    },\n    {\n        \"first_name\": \"Ethan\",\n        \"id\": \"816000007\",\n        \"last_name\": \"Smith\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Amelia\",\n        \"id\": \"816000008\",\n        \"last_name\": \"Clark\",\n        \"programme\": \"Bachelor of Education in Early Childhood Education\"\n    },\n    {\n        \"first_name\": \"Mason\",\n        \"id\": \"816000009\",\n        \"last_name\": \"Lopez\",\n        \"programme\": \"Bachelor of Science in Chemistry\"\n    },\n    {\n        \"first_name\": \"Sophia\",\n        \"id\": \"816000010\",\n        \"last_name\": \"Lee\",\n        \"programme\": \"Master of Science in Data Analytics\"\n    },\n    {\n        \"first_name\": \"Logan\",\n        \"id\": \"816000011\",\n        \"last_name\": \"Hernandez\",\n        \"programme\": \"Bachelor of Science in Chemistry\"\n    },\n    {\n        \"first_name\": \"Ava\",\n        \"id\": \"816000012\",\n        \"last_name\": \"Thompson\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Ella\",\n        \"id\": \"816000013\",\n        \"last_name\": \"Martinez\",\n        \"programme\": \"Bachelor of Fine Arts in Graphic Design\"\n    },\n    {\n        \"first_name\": \"Alexander\",\n        \"id\": \"816000014\",\n        \"last_name\": \"Garcia\",\n        \"programme\": \"Bachelor of Science in Information Systems\"\n    },\n    {\n        \"first_name\": \"Isabella\",\n        \"id\": \"816000015\",\n        \"last_name\": \"Miller\",\n        \"programme\": \"Bachelor of Science in Biomedical Engineering\"\n    },\n    {\n        \"first_name\": \"Jacob\",\n        \"id\": \"816000016\",\n        \"last_name\": \"Taylor\",\n        \"programme\": \"Bachelor of Science in Civil Engineering\"\n    },\n    {\n        \"first_name\": \"Mia\",\n        \"id\": \"816000017\",\n        \"last_name\": \"Murphy\",\n        \"programme\": \"Bachelor of Science in Software Engineering\"\n    },\n    {\n        \"first_name\": \"Lucas\",\n        \"id\": \"816000018\",\n        \"last_name\": \"Anderson\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Charlotte\",\n        \"id\": \"816000019\",\n        \"last_name\": \"Thomas\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    },\n    {\n        \"first_name\": \"Daniel\",\n        \"id\": \"816000020\",\n        \"last_name\": \"Robinson\",\n        \"programme\": \"Master of Science in Artificial Intelligence\"\n    },\n    {\n        \"first_name\": \"Evelyn\",\n        \"id\": \"816000021\",\n        \"last_name\": \"Moore\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Henry\",\n        \"id\": \"816000022\",\n        \"last_name\": \"Walker\",\n        \"programme\": \"Bachelor of Science in Cybersecurity\"\n    },\n    {\n        \"first_name\": \"Scarlett\",\n        \"id\": \"816000023\",\n        \"last_name\": \"Harris\",\n        \"programme\": \"Bachelor of Science in Mechanical Engineering\"\n    },\n    {\n        \"first_name\": \"Michael\",\n        \"id\": \"816000024\",\n        \"last_name\": \"Nelson\",\n        \"programme\": \"Master of Business Administration (MBA)\"\n    },\n    {\n        \"first_name\": \"Sophia\",\n        \"id\": \"816000025\",\n        \"last_name\": \"Carter\",\n        \"programme\": \"Bachelor of Science in Information Systems\"\n    },\n    {\n        \"first_name\": \"Emily\",\n        \"id\": \"816000026\",\n        \"last_name\": \"Mitchell\",\n        \"programme\": \"Bachelor of Science in Data Science\"\n    },\n    {\n        \"first_name\": \"William\",\n        \"id\": \"816000027\",\n        \"last_name\": \"Young\",\n        \"programme\": \"Master of Science in Software Engineering\"\n    },\n    {\n        \"first_name\": \"Dmitri\",\n        \"id\": \"816000028\",\n        \"last_name\": \"Lezama\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Luna\",\n        \"id\": \"816000029\",\n        \"last_name\": \"Green\",\n        \"programme\": \"Bachelor of Science in Electrical Engineering\"\n    },\n    {\n        \"first_name\": \"Sebastian\",\n        \"id\": \"816000030\",\n        \"last_name\": \"Adams\",\n        \"programme\": \"Bachelor of Science in Mathematics\"\n    },\n    {\n        \"first_name\": \"Harper\",\n        \"id\": \"816000031\",\n        \"last_name\": \"Baker\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Elijah\",\n        \"id\": \"816000032\",\n        \"last_name\": \"Hill\",\n        \"programme\": \"Bachelor of Science in Software Engineering\"\n    },\n    {\n        \"first_name\": \"Grace\",\n        \"id\": \"816000033\",\n        \"last_name\": \"Parker\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    },\n    {\n        \"first_name\": \"Matthew\",\n        \"id\": \"816000034\",\n        \"last_name\": \"Cox\",\n        \"programme\": \"Master of Science in Data Analytics\"\n    },\n    {\n        \"first_name\": \"Avery\",\n        \"id\": \"816000035\",\n        \"last_name\": \"Reed\",\n        \"programme\": \"Bachelor of Science in Cybersecurity\"\n    },\n    {\n        \"first_name\": \"Lucas\",\n        \"id\": \"816000036\",\n        \"last_name\": \"Wood\",\n        \"programme\": \"Bachelor of Science in Information Systems\"\n    },\n    {\n        \"first_name\": \"Chloe\",\n        \"id\": \"816000037\",\n        \"last_name\": \"Cooper\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Jack\",\n        \"id\": \"816000038\",\n        \"last_name\": \"Peterson\",\n        \"programme\": \"Bachelor of Science in Civil Engineering\"\n    },\n    {\n        \"first_name\": \"Sophie\",\n        \"id\": \"816000039\",\n        \"last_name\": \"Bell\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Ethan\",\n        \"id\": \"816000040\",\n        \"last_name\": \"Morris\",\n        \"programme\": \"Bachelor of Science in Chemistry\"\n    },\n    {\n        \"first_name\": \"Victoria\",\n        \"id\": \"816000041\",\n        \"last_name\": \"Richardson\",\n        \"programme\": \"Master of Business Administration (MBA)\"\n    },\n    {\n        \"first_name\": \"James\",\n        \"id\": \"816000042\",\n        \"last_name\": \"Cook\",\n        \"programme\": \"Bachelor of Science in Electrical Engineering\"\n    },\n    {\n        \"first_name\": \"Hannah\",\n        \"id\": \"816000043\",\n        \"last_name\": \"Bailey\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    },\n    {\n        \"first_name\": \"Oliver\",\n        \"id\": \"816000044\",\n        \"last_name\": \"Howard\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Lily\",\n        \"id\": \"816000045\",\n        \"last_name\": \"King\",\n        \"programme\": \"Bachelor of Science in Information Systems\"\n    },\n    {\n        \"first_name\": \"Jackson\",\n        \"id\": \"816000046\",\n        \"last_name\": \"Wright\",\n        \"programme\": \"Bachelor of Science in Cybersecurity\"\n    },\n    {\n        \"first_name\": \"Mia\",\n        \"id\": \"816000047\",\n        \"last_name\": \"Evans\",\n        \"programme\": \"Bachelor of Science in Software Engineering\"\n    },\n    {\n        \"first_name\": \"Thomas\",\n        \"id\": \"816000048\",\n        \"last_name\": \"Nelson\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Emma\",\n        \"id\": \"816000049\",\n        \"last_name\": \"Ward\",\n        \"programme\": \"Master of Science in Artificial Intelligence\"\n    },\n    {\n        \"first_name\": \"Benjamin\",\n        \"id\": \"816000050\",\n        \"last_name\": \"Hughes\",\n        \"programme\": \"Bachelor of Science in Civil Engineering\"\n    },\n    {\n        \"first_name\": \"Ella\",\n        \"id\": \"816000051\",\n        \"last_name\": \"Turner\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    },\n    {\n        \"first_name\": \"Alexander\",\n        \"id\": \"816000052\",\n        \"last_name\": \"Phillips\",\n        \"programme\": \"Master of Business Administration (MBA)\"\n    },\n    {\n        \"first_name\": \"Isabella\",\n        \"id\": \"816000053\",\n        \"last_name\": \"Campbell\",\n        \"programme\": \"Bachelor of Science in Mechanical Engineering\"\n    },\n    {\n        \"first_name\": \"Jacob\",\n        \"id\": \"816000054\",\n        \"last_name\": \"Parker\",\n        \"programme\": \"Bachelor of Science in Data Science\"\n    },\n    {\n        \"first_name\": \"Sophia\",\n        \"id\": \"816000055\",\n        \"last_name\": \"Collins\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Charlotte\",\n        \"id\": \"816000056\",\n        \"last_name\": \"Stewart\",\n        \"programme\": \"Bachelor of Science in Electrical Engineering\"\n    },\n    {\n        \"first_name\": \"Liam\",\n        \"id\": \"816000057\",\n        \"last_name\": \"Morris\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Mason\",\n        \"id\": \"816000058\",\n        \"last_name\": \"Rogers\",\n        \"programme\": \"Bachelor of Science in Chemistry\"\n    },\n    {\n        \"first_name\": \"Emily\",\n        \"id\": \"816000059\",\n        \"last_name\": \"Reed\",\n        \"programme\": \"Master of Science in Data Analytics\"\n    },\n    {\n        \"first_name\": \"Logan\",\n        \"id\": \"8160000600\",\n        \"last_name\": \"Carter\",\n        \"programme\": \"Bachelor of Science in Information Systems\"\n    },\n    {\n        \"first_name\": \"Scarlett\",\n        \"id\": \"816000061\",\n        \"last_name\": \"Jenkins\",\n        \"programme\": \"Bachelor of Science in Cybersecurity\"\n    },\n    {\n        \"first_name\": \"Henry\",\n        \"id\": \"816000062\",\n        \"last_name\": \"Kelly\",\n        \"programme\": \"Bachelor of Science in Mechanical Engineering\"\n    },\n    {\n        \"first_name\": \"Evelyn\",\n        \"id\": \"816000063\",\n        \"last_name\": \"Bennett\",\n        \"programme\": \"Bachelor of Science in Computer Science (Special)\"\n    },\n    {\n        \"first_name\": \"Lucas\",\n        \"id\": \"816000064\",\n        \"last_name\": \"Ross\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    },\n    {\n        \"first_name\": \"Grace\",\n        \"id\": \"816000065\",\n        \"last_name\": \"Henderson\",\n        \"programme\": \"Bachelor of Science in Software Engineering\"\n    },\n    {\n        \"first_name\": \"Elijah\",\n        \"id\": \"816000066\",\n        \"last_name\": \"Griffin\",\n        \"programme\": \"Master of Business Administration (MBA)\"\n    },\n    {\n        \"first_name\": \"Victoria\",\n        \"id\": \"816000067\",\n        \"last_name\": \"Hayes\",\n        \"programme\": \"Bachelor of Science in Electrical Engineering\"\n    },\n    {\n        \"first_name\": \"Michael\",\n        \"id\": \"816000068\",\n        \"last_name\": \"Bryant\",\n        \"programme\": \"Bachelor of Science in Environmental Science\"\n    },\n    {\n        \"first_name\": \"Daniel\",\n        \"id\": \"816000069\",\n        \"last_name\": \"Fisher\",\n        \"programme\": \"Bachelor of Science in Civil Engineering\"\n    },\n    {\n        \"first_name\": \"Chloe\",\n        \"id\": \"816000070\",\n        \"last_name\": \"Barnes\",\n        \"programme\": \"Bachelor of Science in Information Systems\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Students - Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.equal(\"Unauthorized\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/students",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"students"
+							]
+						},
+						"description": "Responds with \"Unauthorized\" if credentials are invalid"
+					},
+					"response": [
+						{
+							"name": "Get Students - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/students",
+									"path": [
+										"students"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 23:05:39 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "12"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "Unauthorized"
+						}
+					]
+				},
+				{
+					"name": "Get Students By Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response is an array\", function () {\r",
+									"        pm.expect(response).to.be.an('array');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response array is not empty\", function () {\r",
+									"        pm.expect(response.length).to.be.greaterThan(0);\r",
+									"    });\r",
+									"    // Check if each student object in the array has the required fields\r",
+									"    pm.test(\"Each student object has required fields\", function () {\r",
+									"        response.forEach(function (student) {\r",
+									"            pm.expect(student).to.include.keys('id', 'first_name', 'last_name', 'programme');\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Response status code is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates students not found\", function () {\r",
+									"        pm.expect(pm.response.json().error).to.equal(\"Students not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.include(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/students/{{student_first_name}}-{{student_last_name}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"students",
+								"{{student_first_name}}-{{student_last_name}}"
+							]
+						},
+						"description": "Retrieves the details of a specific student identified by first and last name."
+					},
+					"response": [
+						{
+							"name": "Get Students By Name",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/students/James-Smith",
+									"path": [
+										"students",
+										"James-Smith"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:11:40 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "153"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"first_name\": \"James\",\n        \"id\": \"816000000\",\n        \"last_name\": \"Smith\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Students By Name - Bad Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response;\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    response = pm.response.json();\r",
+									"    pm.test(\"Response code is 404\", function() {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates student not found\", function() {\r",
+									"        pm.expect(response.error).to.equal(\"Students not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 401){\r",
+									"    response = pm.response.text();\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response contains error message\", function () {\r",
+									"        pm.expect(pm.response.text()).to.equal(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/students/{{incorrect_student_first_name}}-{{incorrect_student_last_name}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"students",
+								"{{incorrect_student_first_name}}-{{incorrect_student_last_name}}"
+							]
+						},
+						"description": "Responds with \"Unauthorized\" if credentials are invalid."
+					},
+					"response": [
+						{
+							"name": "Get Students By Name",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/students/James-Smith",
+									"path": [
+										"students",
+										"James-Smith"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:11:40 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "153"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"first_name\": \"James\",\n        \"id\": \"816000000\",\n        \"last_name\": \"Smith\",\n        \"programme\": \"Bachelor of Science in Information Technology\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JWT token is required\", function () {\r",
+									"    pm.expect(pm.request.headers.has('Authorization')).to.be.true;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Success message for student creation\", function () {\r",
+									"        pm.expect(response.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 400) {\r",
+									"    let response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response status code is 400\", function () {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Failure message for student creation\", function () {\r",
+									"        pm.expect(response.success).to.be.false;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test for unauthorized access (401 status code)\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"Response status code is 401\", function () {\r",
+									"        pm.response.to.have.status(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Unauthorized response message\", function () {\r",
+									"        let response = pm.response.json();\r",
+									"        pm.expect(response.error).to.equal(\"Unauthorized\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{new_student_id}}\",\r\n  \"first_name\": \"{{new_student_first_name}}\",\r\n  \"last_name\": \"{{new_student_last_name}}\",\r\n  \"programme\": \"Bachelor of Computer Science\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/student",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"student"
+							]
+						},
+						"description": "Creates a new student record."
+					},
+					"response": [
+						{
+							"name": "Create Student",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"816000071\",\r\n  \"first_name\": \"Anderson\",\r\n  \"last_name\": \"Soobir\",\r\n  \"programme\": \"Bachelor of Computer Science\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/student",
+									"path": [
+										"student"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:46:47 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "22"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Student - Bad Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"if (pm.response.code === 400) {\r",
+									"    pm.test(\"Response code is 400\", function() {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Error message indicates missing data\", function() {\r",
+									"        pm.expect(response.error).to.equal(\"Missing required fields\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{new_student_id}}\",\r\n  \"first_name\": \"{{new_student_first_name}}\",\r\n  \"last_name\": \"{{new_student_last_name}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/student",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"student"
+							]
+						},
+						"description": "Responds with error if request body is bad"
+					},
+					"response": [
+						{
+							"name": "Create Student - Bad Data",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"816000071\",\r\n  \"first_name\": \"Anderson\",\r\n  \"last_name\": \"Soobir\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/student",
+									"path": [
+										"student"
+									]
+								}
+							},
+							"status": "BAD REQUEST",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 23:43:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "41"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Missing required fields\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Student - Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error message\", function () {\r",
+									"    pm.expect(response.error).to.equal(\"Unauthorized\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aGVudGljYXRpb24iLCJpc3MiOiJub3RlU2VydmVyIiwiaWQiOjF9.a-F9ITMaf0c1rFf9zsGkTC90Nyg6tV0S8-zKBeFYhCs5CrCHRREu8iV4wNnyOh5zRsICTw0k4Q1jaaxWC45zgg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{new_student_id}}\",\r\n  \"first_name\": \"{{new_student_first_name}}\",\r\n  \"last_name\": \"{{new_student_last_name}}\",\r\n  \"programme\": \"Bachelor of Computer Science\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/student",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"student"
+							]
+						},
+						"description": "Responds with error if credentials are invalid"
+					},
+					"response": [
+						{
+							"name": "Create Student - Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"816000071\",\r\n  \"first_name\": \"Anderson\",\r\n  \"last_name\": \"Soobir\",\r\n  \"programme\": \"Bachelor of Computer Science\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/student",
+									"path": [
+										"student"
+									]
+								}
+							},
+							"status": "UNAUTHORIZED",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 09 Oct 2024 23:31:18 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "30"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Unauthorized\"\n}"
+						}
+					]
+				}
+			],
+			"description": "All Student API Operations"
+		},
+		{
+			"name": "Utilities",
+			"item": [
+				{
+					"name": "Initialize",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/init",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"init"
+							]
+						},
+						"description": "Initalizes the database (for testing only)."
+					},
+					"response": [
+						{
+							"name": "Initialize",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/init",
+									"path": [
+										"init"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:47:21 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"db initialized!\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Healthy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/health",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Ensures the API is healthy/available."
+					},
+					"response": [
+						{
+							"name": "Healthy",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/health",
+									"path": [
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:47:59 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "26"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"healthy\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						},
+						"description": "Ensures the server is running."
+					},
+					"response": [
+						{
+							"name": "Index",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.2.3 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 07 Oct 2024 04:48:13 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "13"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "Hello, World!"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "staff_id",
+			"value": "000000611",
+			"type": "default"
+		},
+		{
+			"key": "staff_password",
+			"value": "password",
+			"type": "default"
+		},
+		{
+			"key": "admin_id",
+			"value": "000000811",
+			"type": "default"
+		},
+		{
+			"key": "student_first_name",
+			"value": "James",
+			"type": "default"
+		},
+		{
+			"key": "student_last_name",
+			"value": "Smith",
+			"type": "default"
+		},
+		{
+			"key": "admin_password",
+			"value": "password",
+			"type": "default"
+		},
+		{
+			"key": "student_id",
+			"value": "816037178",
+			"type": "default"
+		},
+		{
+			"key": "student_review_title",
+			"value": "Good Student",
+			"type": "string"
+		},
+		{
+			"key": "student_review_student_id",
+			"value": "816000001",
+			"type": "string"
+		},
+		{
+			"key": "student_review_rating",
+			"value": "10",
+			"type": "string"
+		},
+		{
+			"key": "student_review_comment",
+			"value": "Good student would recommmend them.",
+			"type": "string"
+		},
+		{
+			"key": "review_id",
+			"value": "7",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_staff_id",
+			"value": "000000733",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_student_id",
+			"value": "816000074",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_admin_id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_admin_password",
+			"value": "coolpassword",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_student_first_name",
+			"value": "Eggmitri",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_student_last_name",
+			"value": "Eggzama",
+			"type": "default"
+		},
+		{
+			"key": "new_student_id",
+			"value": "816000071",
+			"type": "default"
+		},
+		{
+			"key": "new_student_first_name",
+			"value": "Anderson",
+			"type": "default"
+		},
+		{
+			"key": "new_student_last_name",
+			"value": "Soobir",
+			"type": "default"
+		},
+		{
+			"key": "incorrect_staff_password",
+			"value": "coolpassword",
+			"type": "default"
+		}
+	]
+}
