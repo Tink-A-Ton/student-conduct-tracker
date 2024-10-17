@@ -75,7 +75,7 @@ Routes for server can be tested via [postman](https://documenter.getpostman.com/
 
 The model diagram denotes a User class that is inherited by Admin and Staff, along with a Student data class.<br/>Staff write Reviews for Students, while Admins add new Students to the system.
 
-<img src="https://imgur.com/BeUcGZM.png" alt="Model Diagram" height="500"/>
+<img src="https://imgur.com/M7Lf3cZ.png" alt="Model Diagram" height="500"/>
 
 ## Test & CLI Commands
 
